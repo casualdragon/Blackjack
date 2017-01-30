@@ -8,29 +8,10 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.nonamehero2.blackjack.MainActivity"
-    android:background="#FF006400">
+    tools:context="com.nonamehero2.blackjack.MainActivity">
 
     <TextView
-        android:text="Black Jack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="129dp"
-        android:id="@+id/textView4"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="40sp"
-        android:textColor="#ffffff" />
-
-    <Button
-        android:text="Play"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/play_button"
-        android:textSize="30sp"
-        android:textColor="#ffffff"
-        android:background="#ff660000"
-        android:layout_below="@+id/textView4"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="12dp" />
+        android:text="Hello World!" />
 </RelativeLayout>
