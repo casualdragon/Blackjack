@@ -11,29 +11,26 @@ package com.nonamehero2.blackjack;
 
 
 public class Card {
-    public int getSuite() {
-        return suit;
-    }
 
-    public void setSuite(int suit) {
-        if(suit >= 0 && suit <= 3){
+    Card(int suit, int cardNum){
+        if(suit >= 0 && suit <= 3) {
             this.suit = suit;
         }else{
             throw new IllegalArgumentException("suit must be between 0 and 3");
         }
-
-    }
-
-    public int getCardNum() {
-        return cardNum;
-    }
-
-    public void setCardNum(int cardNum) {
-        if(cardNum >= 0 && cardNum <= 12){
+        if(cardNum >= 0 && cardNum <= 12) {
             this.cardNum = cardNum;
         }else{
             throw new IllegalArgumentException("cardNum must be between 0 and 12");
         }
+    }
+
+    public int getSuite() {
+        return suit;
+    }
+
+    public int getCardNum() {
+        return cardNum;
     }
 
     private int suit;
