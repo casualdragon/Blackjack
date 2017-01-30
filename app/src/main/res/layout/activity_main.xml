@@ -8,10 +8,41 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.nonamehero2.blackjack.MainActivity">
+    tools:context="com.nonamehero2.blackjack.MainActivity"
+    android:background="@drawable/blackjack_bg">
+
+    <TextView
+        android:text="Play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/play_text"
+        android:fontFamily="serif"
+        android:textSize="70sp"
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/title_textview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="104dp" />
+
+    <TextView
+        android:text="Exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/exit_text"
+        android:fontFamily="serif"
+        android:textSize="60sp"
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/play_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="@string/app_name"
+        android:textColor="#FFFFFF"
+        android:fontFamily="serif"
+        android:textSize="65sp"
+        android:id="@+id/title_textview"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
