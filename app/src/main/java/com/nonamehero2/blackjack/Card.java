@@ -9,33 +9,40 @@ package com.nonamehero2.blackjack;
  * and represented as "card010.png"
  */
 
+/*
+ * Suits
+ * 0 is Clubs
+ * 1 is Diamonds
+ * 2 is Spades
+ * 3 is Hearts
+ */
+
 
 public class Card {
-    public int getSuite() {
-        return suit;
-    }
-
-    public void setSuite(int suit) {
+    public Card(int suit, int cardNum) {
         if(suit >= 0 && suit <= 3){
             this.suit = suit;
         }else{
             throw new IllegalArgumentException("suit must be between 0 and 3");
         }
-
-    }
-
-    public int getCardNum() {
-        return cardNum;
-    }
-
-    public void setCardNum(int cardNum) {
-        if(cardNum >= 0 && cardNum <= 12){
+        if(cardNum >= 1 && cardNum <= 13){
             this.cardNum = cardNum;
         }else{
             throw new IllegalArgumentException("cardNum must be between 0 and 12");
         }
     }
 
+    public int getSuite() { return suit; }
+
+    public int getCardNum() {
+        return cardNum;
+    }
+
     private int suit;
     private int cardNum;
+
+    @Override
+    public String toString() {
+        return String.format("card{0}{1}.png", suit, cardNum);
+    }
 }
