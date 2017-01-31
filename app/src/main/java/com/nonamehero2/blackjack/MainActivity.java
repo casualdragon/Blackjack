@@ -5,6 +5,7 @@ package com.nonamehero2.blackjack;
  */
 
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Start Intent for betting here
-                Toast.makeText(MainActivity.this, "Play clicked.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), BetActivity.class);
+                startActivity(intent);
             }
         });
 
