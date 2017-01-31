@@ -48,6 +48,7 @@ public class Player {
 
     //Methods
     public void calculateTotal(){
+        int aceCount = 0;
         if(hand == null){
             return;
         }
@@ -55,6 +56,7 @@ public class Player {
             if(card != null){
                 if(card.getCardNum() == 0){
                     cardTotal += 1;
+                    aceCount++;
                 }
                 else{
                     if(card.getCardNum() > 10){
@@ -63,6 +65,12 @@ public class Player {
                         cardTotal += card.getCardNum();
                     }
                 }
+            }
+        }
+
+        for(int i = 0; i < aceCount; i++){
+            if(cardTotal + 10 <= 21){
+                cardTotal += 10;
             }
         }
     }
