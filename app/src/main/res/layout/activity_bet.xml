@@ -2,17 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#FF006400">
+    android:background="@drawable/blackjack_bg">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_weight="0.02"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textSize="45sp"
+        android:textColor="#ffffff"
+        android:layout_marginTop="15dp" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.03"
+        android:layout_height="68dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:weightSum="10"
+        android:layout_weight="0.02"
+        android:gravity="center_vertical|center_horizontal">
 
-            <TextView
+        <TextView
                 android:text="Bet: "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -21,10 +34,11 @@
                 android:textSize="36sp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp" />
+                android:layout_weight="0"
+                android:layout_marginLeft="15dp"
+                android:fontFamily="serif" />
 
-            <EditText
+        <EditText
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -36,41 +50,45 @@
                 android:layout_alignBaseline="@+id/name_textView"
                 android:layout_alignBottom="@+id/name_textView"
                 android:layout_alignParentStart="true"
-                android:layout_weight="0.23" />
+            android:fontFamily="serif"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_weight="0.11"
+        android:weightSum="10"
+        android:gravity="top|center_vertical|center_horizontal">
+
+        <TextView
+            android:text="Total: "
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:textColor="@android:color/background_light"
+            android:textSize="36sp"
+            android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:layout_weight="0.17">
+            android:layout_weight="0"
+            android:layout_marginLeft="15dp"
+            android:fontFamily="serif" />
 
-            <TextView
-                android:text="Total: "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/background_light"
-                android:textSize="36sp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp" />
+        <TextView
+            android:text="1000.00 "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/total_textView"
+            android:textColor="@android:color/background_light"
+            android:textSize="36sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight=".7"
+            android:fontFamily="serif"/>
+    </LinearLayout>
 
-            <TextView
-                android:text="1000.00 "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/total_textView"
-                android:textColor="@android:color/background_light"
-                android:textSize="36sp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_weight="0.52" />
-        </LinearLayout>
-
-        <LinearLayout
+    <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,7 +106,10 @@
                 android:background="#ff660000"
                 android:layout_alignTop="@+id/add_button"
                 android:layout_alignParentStart="true"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:fontFamily="serif"/>
 
             <Button
                 android:text="+"
@@ -100,8 +121,25 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:textSize="45sp"
-                android:layout_weight="0.86" />
+                android:layout_weight="0.86"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:fontFamily="serif"/>
 
         </LinearLayout>
+
+    <Button
+        android:text="Place Bet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bet_button"
+        android:layout_weight="0.03"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="#ff660000"
+        android:textSize="45sp"
+        android:textColor="#ffffff"
+        android:fontFamily="serif"/>
 
 </LinearLayout>
