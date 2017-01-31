@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#FF006400">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.03"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+            <TextView
+                android:text="Bet: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/name_textView"
+                android:textColor="@android:color/background_light"
+                android:textSize="36sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp" />
+
+            <EditText
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/bet_editText"
+                android:textColor="@android:color/white"
+                android:textSize="36sp"
+                android:text="1000.00"
+                android:layout_alignBaseline="@+id/name_textView"
+                android:layout_alignBottom="@+id/name_textView"
+                android:layout_alignParentStart="true"
+                android:layout_weight="0.23" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="0.17">
+
+            <TextView
+                android:text="Total: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/background_light"
+                android:textSize="36sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp" />
+
+            <TextView
+                android:text="1000.00 "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/total_textView"
+                android:textColor="@android:color/background_light"
+                android:textSize="36sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_weight="0.52" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="0.02">
+
+            <Button
+                android:text="-"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/subtract_button"
+                android:textSize="45sp"
+                android:textColor="#FFFFFFFF"
+                android:background="#ff660000"
+                android:layout_alignTop="@+id/add_button"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1" />
+
+            <Button
+                android:text="+"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/add_button"
+                android:background="#ff660000"
+                android:textColor="@android:color/background_light"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:textSize="45sp"
+                android:layout_weight="0.86" />
+
+        </LinearLayout>
+
+</LinearLayout>
