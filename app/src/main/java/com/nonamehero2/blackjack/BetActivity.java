@@ -35,7 +35,7 @@ public class BetActivity extends AppCompatActivity {
                 int total = Integer.parseInt(sTotal);
                     bet += 100;
                 if(bet <= total) {
-                    et.setText(bet);
+                    et.setText(new Integer(bet).toString());
                 }else{
                     Toast.makeText(getApplicationContext(), "The bet cannot exceed the total.",Toast.LENGTH_LONG);
                 }
@@ -49,7 +49,7 @@ public class BetActivity extends AppCompatActivity {
                 int bet = Integer.parseInt(et.getText().toString());
                 bet -= 100;
                 if(bet > 0) {
-                    et.setText(bet);
+                    et.setText(new Integer(bet).toString());
                 }else{
                     Toast.makeText(getApplicationContext(), "The bet cannot be less than 0.",Toast.LENGTH_LONG);
                 }
