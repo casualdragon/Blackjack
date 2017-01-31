@@ -54,16 +54,14 @@ public class Player {
         }
         for (Card card:hand) {
             if(card != null){
-                if(card.getCardNum() == 0){
-                    cardTotal += 1;
+                if(card.getCardNum() == 1){
                     aceCount++;
                 }
-                else{
-                    if(card.getCardNum() > 10){
-                        cardTotal += 10;
-                    }else {
-                        cardTotal += card.getCardNum();
-                    }
+
+                if(card.getCardNum() > 10){
+                    cardTotal += 10;
+                }else {
+                    cardTotal += card.getCardNum();
                 }
             }
         }

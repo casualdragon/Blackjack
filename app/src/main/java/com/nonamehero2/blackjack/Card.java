@@ -9,6 +9,14 @@ package com.nonamehero2.blackjack;
  * and represented as "card010.png"
  */
 
+/*
+ * Suits
+ * 0 is Clubs
+ * 1 is Diamonds
+ * 2 is Spades
+ * 3 is Hearts
+ */
+
 
 public class Card {
     public Card(int suit, int cardNum) {
@@ -17,7 +25,7 @@ public class Card {
         }else{
             throw new IllegalArgumentException("suit must be between 0 and 3");
         }
-        if(cardNum >= 0 && cardNum <= 12){
+        if(cardNum >= 1 && cardNum <= 13){
             this.cardNum = cardNum;
         }else{
             throw new IllegalArgumentException("cardNum must be between 0 and 12");
@@ -32,4 +40,9 @@ public class Card {
 
     private int suit;
     private int cardNum;
+
+    @Override
+    public String toString() {
+        return String.format("card{0}{1}.png", suit, cardNum);
+    }
 }
