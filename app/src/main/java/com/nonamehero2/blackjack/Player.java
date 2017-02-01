@@ -1,7 +1,7 @@
 package com.nonamehero2.blackjack;
 
 /**
- * Created by nonam on 1/31/2017.
+ * Created by Zachary Taylor on 1/31/2017.
  */
 
 public class Player {
