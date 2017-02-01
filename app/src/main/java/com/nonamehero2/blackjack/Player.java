@@ -72,5 +72,18 @@ public class Player {
             }
         }
     }
+    /*
+        This method is used to subtract the bet from the
+        player's total, and returns a boolean value to check
+        if the total is greater than the bet
+     */
+    public boolean subtractBet (){
+        if(money >= currentBet){
+            money = money - currentBet;
+            return true;
+        }else{
+            return false;
+        }
+    }
 
 }
