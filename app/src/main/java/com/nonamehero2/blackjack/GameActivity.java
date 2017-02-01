@@ -13,12 +13,12 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bet);
+        setContentView(R.layout.activity_game);
 
         Intent intent = getIntent();
         int bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
         if(bet != 0){
-            
+
         }else{
             Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
             Intent ret = new Intent(getApplicationContext(), MainActivity.class);

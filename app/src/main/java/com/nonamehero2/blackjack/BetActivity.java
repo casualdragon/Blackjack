@@ -61,6 +61,7 @@ public class BetActivity extends AppCompatActivity {
                 int bet = Integer.parseInt(et.getText().toString());
                 Intent intent = new Intent(getApplicationContext(), GameActivity.class);
                 intent.putExtra(BET_KEY, bet);
+                startActivity(intent);
             }
         });
     }
