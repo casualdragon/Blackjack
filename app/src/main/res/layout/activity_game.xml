@@ -45,16 +45,16 @@
             <ImageView
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/back_black"
-                android:id="@+id/player_imageview1"
+                android:id="@+id/dealer_imageview1"
                 android:layout_width="100dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignEnd="@+id/player_imageview2"
+                android:layout_alignEnd="@+id/dealer_imageview2"
                 android:layout_marginEnd="25dp" />
 
             <ImageView
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/back_black"
-                android:id="@+id/player_imageview2"
+                android:id="@+id/dealer_imageview2"
                 android:layout_width="100dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />
@@ -62,19 +62,19 @@
             <ImageView
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/back_black"
-                android:id="@+id/player_imageview3"
+                android:id="@+id/dealer_imageview3"
                 android:layout_width="100dp"
                 android:layout_marginLeft="25dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/player_imageview2" />
+                android:layout_alignStart="@+id/dealer_imageview2" />
 
             <ImageView
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/back_black"
-                android:id="@+id/player_imageview4"
+                android:id="@+id/dealer_imageview4"
                 android:layout_width="100dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/player_imageview3"
+                android:layout_alignStart="@+id/dealer_imageview3"
                 android:layout_marginStart="25dp" />
 
             <ImageView
@@ -84,7 +84,7 @@
                 android:layout_width="100dp"
                 android:layout_marginStart="25dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/player_imageview4" />
+                android:layout_alignStart="@+id/dealer_imageview4" />
 
             <TextView
                 android:text="00"
@@ -106,7 +106,7 @@
                 android:id="@+id/dealer_imageview"
                 android:layout_width="100dp"
                 android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/player_imageview2"
+                android:layout_toStartOf="@+id/dealer_imageview2"
                 android:layout_marginEnd="18dp" />
 
 
@@ -276,14 +276,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/stay_button"
-                android:layout_weight="9" />
+                android:layout_weight="9"
+                android:background="#ff660000"
+                android:textColor="@android:color/white"
+                android:fontFamily="serif"
+                android:layout_marginRight="10dp" />
 
             <Button
                 android:text="Hit"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/hit_button"
-                android:layout_weight="9" />
+                android:layout_weight="9"
+                android:background="#ff660000"
+                android:textColor="@android:color/white"
+                android:fontFamily="serif"/>
         </LinearLayout>
     </LinearLayout>
 
