@@ -1,5 +1,7 @@
 package com.nonamehero2.blackjack;
 
+import java.util.Random;
+
 /**
  * Created by Amy on 2/1/2017.
  */
@@ -21,4 +23,11 @@ public class Deck {
         }
     }
 
+    public Card randomCard(){
+        Random random = new Random();
+        int suit = random.nextInt(row+1);
+        int card = random.nextInt(column+1);
+
+        return deck[suit][card];
+    }
 }
