@@ -9,6 +9,17 @@ import android.widget.Toast;
  * Created by Amy on 2/1/2017.
  */
 
+/**
+ * Back of image credit jeffshee
+ * http://opengameart.org/content/colorful-poker-card-back
+ * Licensed under Creative Commons CC BY 3.0
+ * https://creativecommons.org/licenses/by/3.0/
+ *
+ * Card Images credit
+ * https://code.google.com/archive/p/vector-playing-cards/
+ * Card images are in public domain.
+ */
+
 public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
