@@ -8,9 +8,10 @@ import java.util.Random;
 
 public class Deck {
     //Fields
-    private Card [][] deck = new Card[3][13];
     private final int row = 3;
     private final int column = 13;
+    private Card [][] deck = new Card[row][column];
+
 
     //Constructor
     public Deck(){
@@ -23,11 +24,11 @@ public class Deck {
         }
     }
 
+    //Produces a random card
     public Card randomCard(){
         Random random = new Random();
         int suit = random.nextInt(row+1);
         int card = random.nextInt(column+1);
-
         return deck[suit][card];
     }
 }

@@ -32,7 +32,7 @@ public class GameActivity extends AppCompatActivity {
         int bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
         /*
             Checks for any error with the number returned by the intent.
-            If there is any error, the user is reurned to the main screen
+            If there is any error, the user is returned to the main screen
          */
         if(bet == 0){
             Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
@@ -41,6 +41,9 @@ public class GameActivity extends AppCompatActivity {
         }
         TextView bet_tv = (TextView)findViewById(R.id.bet_game_textView);
         bet_tv.setText(Integer.toString(bet));
+
+        Player user = new Player(bet);
+        Player dealer = new Player();
 
         findViewById(R.id.hit_button).setOnClickListener(new View.OnClickListener() {
             @Override

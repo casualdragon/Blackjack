@@ -16,6 +16,11 @@ public class Player {
         this.cardTotal = 0;
         this.currentBet = currentBet;
     }
+    public Player(){
+        this.money = 0;
+        this.cardTotal = 0;
+        this.currentBet = 0;
+    }
 
     //Getters and Setters
     public int getMoney() {
