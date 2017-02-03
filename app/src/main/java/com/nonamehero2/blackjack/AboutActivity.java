@@ -9,8 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Created by Amy Hill on 1/31/2017.
- * This activity is used for interactions in the bet activity.
+ * Created by Zachary Taylor on 2/3/2017.
+ * This activity is used displaying the credits and attributions
  */
 
 public class AboutActivity extends AppCompatActivity {
