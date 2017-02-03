@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView playView = (TextView) findViewById(R.id.play_text);
+        TextView aboutView = (TextView) findViewById(R.id.about_text);
         TextView exitView = (TextView) findViewById(R.id.exit_text);
 
         //Play button listener
@@ -29,6 +30,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Start Intent for betting here
                 Intent intent = new Intent(getApplicationContext(), BetActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        aboutView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Start Intent for betting here
+                Intent intent = new Intent(getApplicationContext(), AboutActivity.class);
                 startActivity(intent);
             }
         });
