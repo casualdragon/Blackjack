@@ -1,5 +1,7 @@
 package com.nonamehero2.blackjack;
 
+import android.util.Log;
+
 /**
  * Created by Zachary Taylor on 1/27/2017.
  * Suit is a numerical representation of the 4 suits from 0 to 3.
@@ -43,6 +45,8 @@ public class Card {
 
     @Override
     public String toString() {
-        return String.format("card{0}{1}.png", suit, cardNum);
+        //Log.i("======================", String.format("card%s%s.png", suit, cardNum));
+        return String.format("card%s%s.png", suit, cardNum);
+
     }
 }
