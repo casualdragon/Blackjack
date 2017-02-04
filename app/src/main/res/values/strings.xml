@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Blackjack!</string>
+    <string name="back_cards_name">Back of image credit jeffshee\nhttp://opengameart.org/content/colorful-poker-card-back</string>
+    <string name="back_cards_license">Licensed under Creative Commons CC BY 3.0\nhttps://creativecommons.org/licenses/by/3.0/</string>
+    <string name="front_cards_name">Card Images credit\nhttps://code.google.com/archive/p/vector-playing-cards/</string>
+    <string name="front_cards_license">Card images are in public domain.</string>
 </resources>
