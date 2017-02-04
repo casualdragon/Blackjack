@@ -6,15 +6,24 @@ package com.nonamehero2.blackjack;
 
 public class Player {
     //Fields
-    private Card[] hand;
+    private final int length = 5;
+    private Card[] hand = new Card[5];
     private int money;
     private int currentBet;
     private int cardTotal;
+    private int position;
 
     public Player(int currentBet) {
         this.money = 10000;
         this.cardTotal = 0;
         this.currentBet = currentBet;
+        this.position = 0;
+    }
+    public Player(){
+        this.money = 0;
+        this.cardTotal = 0;
+        this.currentBet = 0;
+        this.position = 0;
     }
 
     //Getters and Setters
@@ -45,6 +54,8 @@ public class Player {
     public void setHand(Card[] hand) {
         this.hand = hand;
     }
+
+    public int getPosition(){return position;}
 
     //Methods
     public void calculateTotal(){
@@ -86,4 +97,13 @@ public class Player {
         }
     }
 
+    public void addCard(Card card){
+        if(position < length){
+            hand[position] = card;
+            position++;
+        }
+    }
+    public void resetHand(){
+        position = 0;
+    }
 }
