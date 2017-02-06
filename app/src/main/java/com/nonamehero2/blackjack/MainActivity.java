@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //new Card(0,12).toString();
+
         TextView playView = (TextView) findViewById(R.id.play_text);
         TextView aboutView = (TextView) findViewById(R.id.about_text);
         TextView exitView = (TextView) findViewById(R.id.exit_text);
