@@ -45,6 +45,6 @@ public class Card {
 
     @Override
     public String toString() {
-        return String.format("card%1$s%2$s.png", Integer.toString(suit), Integer.toString(cardNum));
+        return String.format("card%1$s%2$s", Integer.toString(suit), Integer.toString(cardNum));
     }
 }

@@ -63,6 +63,26 @@ public class GameActivity extends AppCompatActivity {
         final Player user = new Player(bet);
         final Player dealer = new Player();
         final Deck deck = new Deck();
+        int resID;
+
+        Card rand;
+        for(int i = 0; i < 3; i++ ) {
+            rand = deck.randomCard();
+            user.addCard(rand);
+            resID = getResources().getIdentifier(rand.toString(), "drawable", getPackageName());
+            playerImageViews[i].setImageResource(resID);
+        }
+        //Check for natural 21 for player
+        TextView tv = (TextView)findViewById(R.id.player_score_textview);
+        tv.setText(Integer.toString(user.getCardTotal()));
+
+        rand = deck.randomCard();
+        dealer.addCard(rand);
+        dealer.addCard(deck.randomCard());
+        resID = getResources().getIdentifier(rand.toString(), "drawable", getPackageName());
+        dealerImageViews[0].setImageResource(resID);
+
+        //Check for natural 21 for dealer
 
         findViewById(R.id.hit_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,7 +101,10 @@ public class GameActivity extends AppCompatActivity {
                 }else if(user.getCardTotal() > 21){
                     //Lose - subtract bet from total
                     user.subtractBet();
+                    user.resetHand();
+                    dealer.resetHand();
                 }
+                //Check to see if the player's hand has 5 cards
             }
         });
 
