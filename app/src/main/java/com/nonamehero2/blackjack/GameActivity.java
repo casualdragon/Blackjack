@@ -35,7 +35,7 @@ public class GameActivity extends AppCompatActivity {
         playerImageViews[0] = (ImageView) findViewById(R.id.player_imageview1);
         playerImageViews[1] = (ImageView) findViewById(R.id.player_imageview2);
         playerImageViews[2] = (ImageView) findViewById(R.id.player_imageview3);
-        //playerImageViews[3] = (ImageView) findViewById(R.id.player_imageview4);
+        playerImageViews[3] = (ImageView) findViewById(R.id.player_imageview4);
         playerImageViews[4] = (ImageView) findViewById(R.id.player_imageview5);
 
         ImageView [] dealerImageViews = new ImageView[5];
@@ -44,6 +44,14 @@ public class GameActivity extends AppCompatActivity {
         dealerImageViews[2] = (ImageView) findViewById(R.id.dealer_imageview3);
         dealerImageViews[3] = (ImageView) findViewById(R.id.dealer_imageview4);
         dealerImageViews[4] = (ImageView) findViewById(R.id.dealer_imageview5);
+
+        for (ImageView card: playerImageViews) {
+            card.setImageResource(R.drawable.card00);
+        }
+
+        for (ImageView card: dealerImageViews) {
+            card.setImageResource(R.drawable.card00);
+        }
 
         Intent intent = getIntent();
         int bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
@@ -73,7 +81,7 @@ public class GameActivity extends AppCompatActivity {
             playerImageViews[i].setImageResource(resID);
         }
         //Check for natural 21 for player
-        TextView tv = (TextView)findViewById(R.id.player_score_textview);
+        TextView tv = (TextView)findViewById(R.id.player_total_textview);
         tv.setText(Integer.toString(user.getCardTotal()));
 
         rand = deck.randomCard();
@@ -115,4 +123,5 @@ public class GameActivity extends AppCompatActivity {
             }
         });
     }
+
 }
