@@ -26,19 +26,25 @@ import android.widget.Toast;
 
 public class GameActivity extends AppCompatActivity {
 
+    private Deck deck;
+    private ImageView [] playerImageViews;
+    private ImageView [] dealerImageViews;
+    private Player user;
+    private Player dealer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        ImageView [] playerImageViews = new ImageView[5];
+        playerImageViews = new ImageView[5];
         playerImageViews[0] = (ImageView) findViewById(R.id.player_imageview1);
         playerImageViews[1] = (ImageView) findViewById(R.id.player_imageview2);
         playerImageViews[2] = (ImageView) findViewById(R.id.player_imageview3);
         playerImageViews[3] = (ImageView) findViewById(R.id.player_imageview4);
         playerImageViews[4] = (ImageView) findViewById(R.id.player_imageview5);
 
-        ImageView [] dealerImageViews = new ImageView[5];
+        dealerImageViews = new ImageView[5];
         dealerImageViews[0] = (ImageView) findViewById(R.id.dealer_imageview1);
         dealerImageViews[1] = (ImageView) findViewById(R.id.dealer_imageview2);
         dealerImageViews[2] = (ImageView) findViewById(R.id.dealer_imageview3);
@@ -68,51 +74,33 @@ public class GameActivity extends AppCompatActivity {
         TextView bet_tv = (TextView)findViewById(R.id.bet_game_textView);
         bet_tv.setText(Integer.toString(bet));
 
-        final Player user = new Player(bet);
-        final Player dealer = new Player();
-        final Deck deck = new Deck();
-        int resID;
+        user = new Player(bet);
+        dealer = new Player();
+        deck = new Deck();
 
-        Card rand;
-        for(int i = 0; i < 3; i++ ) {
-            rand = deck.randomCard();
-            user.addCard(rand);
-            resID = getResources().getIdentifier(rand.toString(), "drawable", getPackageName());
-            playerImageViews[i].setImageResource(resID);
-        }
+
+        //Initial cards
+        dealCard(user);
+        dealCard(dealer);
+        dealCard(user);
+        dealCard(dealer);
+
+        updateCards();
+
         //Check for natural 21 for player
-        TextView tv = (TextView)findViewById(R.id.player_total_textview);
-        tv.setText(Integer.toString(user.getCardTotal()));
 
-        rand = deck.randomCard();
-        dealer.addCard(rand);
-        dealer.addCard(deck.randomCard());
-        resID = getResources().getIdentifier(rand.toString(), "drawable", getPackageName());
-        dealerImageViews[0].setImageResource(resID);
+
 
         //Check for natural 21 for dealer
 
         findViewById(R.id.hit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("=====================", "Hit button");
-                //Picks a random card
-                Card rand = deck.randomCard();
-                user.addCard(rand);
+                dealCard(user);
+                dealCard(dealer);
 
-                //Displays the card in the user's hand
-
-                //Check hand to see if it is 21 - Win
-                if(user.getCardTotal() == 21){
-
-                //Check hand to see if it is over 21
-                }else if(user.getCardTotal() > 21){
-                    //Lose - subtract bet from total
-                    user.subtractBet();
-                    user.resetHand();
-                    dealer.resetHand();
-                }
-                //Check to see if the player's hand has 5 cards
+                updateCards();
+                updateScores();
             }
         });
 
@@ -123,5 +111,50 @@ public class GameActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    //updates imageviews for the cards
+    private void updateCards(){
+        int id;
+        Card rand;
+        if(playerImageViews != null && dealer != null){
+            for (int i = 0; i < Player.LENGTH; i++) {
+                rand =  user.getHand()[i];
+                id = getResources().getIdentifier(rand.toString(), "drawable", getPackageName());
+                playerImageViews[i].setImageResource(id);
+
+            }
+            TextView tv = (TextView)findViewById(R.id.player_total_textview);
+            tv.setText(Integer.toString(user.getCardTotal()));
+        }
+
+        if(dealerImageViews != null && dealer != null){
+            for (int i = 0; i < Player.LENGTH; i++) {
+                rand =  dealer.getHand()[i];
+                id = getResources().getIdentifier(rand.toString(), "drawable", getPackageName());
+                dealerImageViews[i].setImageResource(id);
+
+            }
+            TextView tv = (TextView)findViewById(R.id.dealer_total_textview);
+            tv.setText(Integer.toString(dealer.getCardTotal()));
+        }
+    }
+
+    //deals a card to the players
+    //does not update imageviews
+    //this might be moved to deck class;
+    private void dealCard(Player targetPlayer){
+        int resID;
+        Card rand;
+        rand = deck.randomCard();
+        targetPlayer.addCard(rand);
+    }
+
+    private void updateScores(){
+
+
+
+    }
+
 
 }

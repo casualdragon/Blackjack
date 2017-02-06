@@ -27,10 +27,10 @@ public class Card {
         }else{
             throw new IllegalArgumentException("suit must be between 0 and 3");
         }
-        if(cardNum >= 1 && cardNum <= 13){
+        if(cardNum >= 0 && cardNum <= 13){
             this.cardNum = cardNum;
         }else{
-            throw new IllegalArgumentException("cardNum must be between 0 and 12");
+            throw new IllegalArgumentException("cardNum must be between 0 and 13");
         }
     }
 
