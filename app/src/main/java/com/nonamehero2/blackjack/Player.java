@@ -70,9 +70,7 @@ public class Player {
 
     public void calculateTotal(){
         int aceCount = 0;
-        if(hand == null){
-            return;
-        }
+        cardTotal = 0;
         for (Card card:hand) {
             if(card != null){
                 if(card.getCardNum() == 1){

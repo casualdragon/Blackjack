@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,10 @@ import android.widget.Toast;
 
 public class GameActivity extends AppCompatActivity {
 
+    private enum gameState {NO_WIN, DEALER_STAND, PLAYER_STAND, PLAYER_WIN, DEALER_WIN, DRAW, NATURAL_WIN}
+
+    private gameState state;
+    private int turnCount;
     private Deck deck;
     private ImageView [] playerImageViews;
     private ImageView [] dealerImageViews;
@@ -51,6 +56,7 @@ public class GameActivity extends AppCompatActivity {
         dealerImageViews[3] = (ImageView) findViewById(R.id.dealer_imageview4);
         dealerImageViews[4] = (ImageView) findViewById(R.id.dealer_imageview5);
 
+        //Sets imageviews to blank card
         for (ImageView card: playerImageViews) {
             card.setImageResource(R.drawable.card00);
         }
@@ -86,34 +92,113 @@ public class GameActivity extends AppCompatActivity {
         dealCard(dealer);
 
         updateCards();
+        turnCount = 2;
+        state = gameState.NO_WIN;
 
-        //Check for natural 21 for player
+        //Check for natural 21 for dealer and player
+        checkScores(true);
 
 
 
-        //Check for natural 21 for dealer
+
+
 
         findViewById(R.id.hit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dealCard(user);
-                dealCard(dealer);
-
-                updateCards();
-                updateScores();
+                if(turnCount >= Player.LENGTH){
+                    checkScores(false);
+                }else {
+                    dealCard(user);
+                    playDealer();
+                }
             }
         });
 
         findViewById(R.id.stay_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //
+                if(state == gameState.DEALER_STAND){
+                    checkScores(false);
+                }else {
+                    state = gameState.PLAYER_STAND;
+                    playDealer();
+                }
             }
         });
     }
 
+    //This function draws the cards for the dealer.
+    private void playDealer(){
+        turnCount++;
+        if(dealer.getCardTotal() > 17 && state != gameState.PLAYER_STAND){
+            state = gameState.DEALER_STAND;
+        }
 
-    //updates imageviews for the cards
+        if (state != gameState.DEALER_STAND) {
+            if(turnCount < Player.LENGTH) {
+                dealCard(dealer);
+            }
+        }
+
+
+        Log.i("======================STATE", state.toString());
+        updateCards();
+        checkScores(false);
+
+    }
+
+    //This function is the main logic behind the scoring system.
+    private void checkScores(boolean isFirstCheck) {
+        // The game must move to an end state with either winning or a draw from this statement
+        if(dealer.getCardTotal() >= 21 || user.getCardTotal() >= 21){
+
+            if(dealer.getCardTotal() == 21 && user.getCardTotal() != 21){
+                state = gameState.DEALER_WIN;
+            } else if(user.getCardTotal() == 21 && dealer.getCardTotal() != 21){
+                state = gameState.PLAYER_WIN;
+                if(isFirstCheck){
+                    state = gameState.NATURAL_WIN;
+                }
+            } else if(dealer.getCardTotal() > 21 && user.getCardTotal() < 21){
+                state = gameState.PLAYER_WIN;
+            } else if (dealer.getCardTotal() < 21 && user.getCardTotal() > 21){
+                state = gameState.DEALER_WIN;
+            }
+            else {
+                state = gameState.DRAW;
+            }
+
+        /* From here and below the game must continue if the dealer tried to stand or the player
+         * stands and the dealer hasn't won.
+         * If the player stands and they are down the player loses otherwise the game plays until
+         * the dealer is higher or the dealer wins.
+         */
+        }else if(state == gameState.DEALER_STAND){
+            if(dealer.getCardTotal() <= user.getCardTotal()){
+                state = gameState.NO_WIN;
+                playDealer();
+            }
+        }
+        else if (state == gameState.PLAYER_STAND){
+            if(dealer.getCardTotal() < user.getCardTotal()){
+                playDealer();
+            }else if (dealer.getCardTotal() > user.getCardTotal()){
+                state = gameState.DEALER_WIN;
+            }
+            else if(dealer.getCardTotal() == user.getCardTotal()){
+                state = gameState.DRAW;
+            }
+        }
+        else if( turnCount >= Player.LENGTH){
+            state = gameState.DRAW;
+        }
+
+        endGame();
+    }
+
+
+    //this function updates the imageviews for the cards.
     private void updateCards(){
         int id;
         Card rand;
@@ -140,20 +225,40 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    //deals a card to the players
-    //does not update imageviews
-    //this might be moved to deck class;
+    //This deals the cards to the player but doesn't update imageview.
     private void dealCard(Player targetPlayer){
-        int resID;
         Card rand;
         rand = deck.randomCard();
         targetPlayer.addCard(rand);
     }
 
-    private void updateScores(){
 
+    private void endGame() {
+        if(state == gameState.DEALER_WIN){
+            Toast.makeText(this,"Dealer Wins, player looses bet", Toast.LENGTH_LONG).show();
+            Log.i("======================", "Dealer Wins");
+            toggleButtons(false);
+        } else if( state == gameState.PLAYER_WIN){
+            Toast.makeText(this,"Player Wins, player wins twice bet", Toast.LENGTH_LONG).show();
+            Log.i("======================", "Player Reg Win");
+            toggleButtons(false);
+        }
+        else if(state == gameState.NATURAL_WIN){
+            Toast.makeText(this,"Natural Win for player, player wins twice and half the bet", Toast.LENGTH_LONG).show();
+            Log.i("======================", "Player Nat Win");
+            toggleButtons(false);
+        }else if(state == gameState.DRAW){
+            Toast.makeText(this,"Draw, house wins. JK no loss for player", Toast.LENGTH_LONG).show();
+            Log.i("======================", "Draw");
+            toggleButtons(false);
+        }
+    }
 
-
+    private void toggleButtons(boolean isEnabled){
+        Button b = (Button) findViewById(R.id.hit_button);
+        b.setEnabled(isEnabled);
+        b= (Button) findViewById(R.id.stay_button);
+        b.setEnabled(isEnabled);
     }
 
 

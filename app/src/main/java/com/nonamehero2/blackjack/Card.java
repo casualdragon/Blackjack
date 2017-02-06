@@ -5,7 +5,8 @@ import android.util.Log;
 /**
  * Created by Zachary Taylor on 1/27/2017.
  * Suit is a numerical representation of the 4 suits from 0 to 3.
- * CardNum is the value of the card in order from 0 to 12.
+ * CardNum is the value of the card in order from 0 to 13.
+ * Card 00 is a blank card.
  * This setup is designed so it can be appened to a string and produce
  * a filename for that card. ex. suit 0 card 10 would be a 10 of hearts
  * and represented as "card010.png"
