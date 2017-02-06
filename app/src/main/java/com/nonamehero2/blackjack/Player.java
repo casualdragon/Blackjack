@@ -101,6 +101,8 @@ public class Player {
         if(position < length){
             hand[position] = card;
             position++;
+        }else{
+            throw new IllegalArgumentException("hand must be not exceed 5");
         }
     }
     public void resetHand(){

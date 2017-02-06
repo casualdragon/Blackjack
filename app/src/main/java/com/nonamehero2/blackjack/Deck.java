@@ -48,6 +48,7 @@ public class Deck {
             }
 
             for (int i = 0; i < position; i++) {
+                Log.i("======================", "card:" + past[i].toString());
                 if (deck[suit][card] == past[i]) {
                     flag = false;
                 }

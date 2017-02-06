@@ -45,8 +45,6 @@ public class Card {
 
     @Override
     public String toString() {
-        //Log.i("======================", String.format("card%s%s.png", suit, cardNum));
-        return String.format("card%s%s.png", suit, cardNum);
-
+        return String.format("card%1$s%2$s", Integer.toString(suit), Integer.toString(cardNum));
     }
 }
