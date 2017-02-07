@@ -86,7 +86,7 @@ public class GameActivity extends AppCompatActivity {
             dealer = new Player();
             deck = new Deck();
 
-            dealInitialCards();
+             startGame();
 
         }else{
             state = (gameState) savedInstanceState.getSerializable(STATE);
@@ -151,7 +151,7 @@ public class GameActivity extends AppCompatActivity {
     private void startGame() {
 
         TextView moneyView = (TextView) findViewById(R.id.money_amount_textview);
-        moneyView.setText("$" + user.getCurrentBet());
+        moneyView.setText("$" + user.getMoney());
 
         //Initial cards
         dealCard(user);
@@ -329,14 +329,18 @@ public class GameActivity extends AppCompatActivity {
         popup.setNegativeButton("Change\nBet", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //Goes to bet screen
+                Intent intent = new Intent(getApplicationContext(), BetActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 
         popup.setNeutralButton("Main\nMenu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //Goes to main menu
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 
