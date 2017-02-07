@@ -68,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
             dealerImageViews[3] = (ImageView) findViewById(R.id.dealer_imageview4);
             dealerImageViews[4] = (ImageView) findViewById(R.id.dealer_imageview5);
 
-
+            startGame();
 
         //Sets imageviews to blank card
         for (ImageView card: playerImageViews) {
@@ -79,14 +79,9 @@ public class GameActivity extends AppCompatActivity {
                 card.setImageResource(R.drawable.card00);
             }
 
-            Intent intent = getIntent();
-            bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
-
             user = new Player(bet);
             dealer = new Player();
             deck = new Deck();
-
-            dealInitialCards();
 
         }else{
             state = (gameState) savedInstanceState.getSerializable(STATE);
@@ -94,6 +89,8 @@ public class GameActivity extends AppCompatActivity {
             dealer = (Player) savedInstanceState.getSerializable(DEALER);
             turnCount = (int)savedInstanceState.getSerializable(TURNCOUNT);
             bet = (int) savedInstanceState.getSerializable(BET);
+
+            updateCards();
 
             // Debugging Information
             Log.i("=============", "Accessing bundle");
@@ -106,20 +103,14 @@ public class GameActivity extends AppCompatActivity {
             Checks for any error with the number returned by the intent.
             If there is any error, the user is returned to the main screen
          */
+        Intent intent = getIntent();
+        bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
+
         if(bet == 0){
             Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
             Intent ret = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(ret);
         }
-
-        TextView bet_tv = (TextView)findViewById(R.id.bet_game_textView);
-        bet_tv.setText(Integer.toString(bet));
-
-        user = new Player(bet);
-        dealer = new Player();
-        deck = new Deck();
-
-        startGame();
 
 
         findViewById(R.id.hit_button).setOnClickListener(new View.OnClickListener() {
