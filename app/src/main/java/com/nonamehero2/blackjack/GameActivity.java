@@ -68,7 +68,6 @@ public class GameActivity extends AppCompatActivity {
             dealerImageViews[3] = (ImageView) findViewById(R.id.dealer_imageview4);
             dealerImageViews[4] = (ImageView) findViewById(R.id.dealer_imageview5);
 
-            startGame();
 
         //Sets imageviews to blank card
         for (ImageView card: playerImageViews) {
@@ -85,6 +84,7 @@ public class GameActivity extends AppCompatActivity {
 
 
              startGame();
+
         }else{
             state = (gameState) savedInstanceState.getSerializable(STATE);
             user = (Player) savedInstanceState.getSerializable(USER);
@@ -160,6 +160,69 @@ public class GameActivity extends AppCompatActivity {
         checkScores(true);
     }
 
+    //Ends the game if the game is in a final state.
+    private void endGame() {
+        if(state == gameState.DEALER_WIN){
+            user.addBet(-1.0);
+            popupMenu("Dealer Wins", "You lose your bet.");
+            //Toast.makeText(this,"Dealer Wins, player looses bet", Toast.LENGTH_LONG).show();
+            Log.i("======================", "Dealer Wins");
+            toggleButtons(false);
+        } else if( state == gameState.PLAYER_WIN){
+            user.addBet(2.0);
+            popupMenu("Player Wins", "You win 2x your bet.");
+            //Toast.makeText(this,"Player Wins, player wins twice bet", Toast.LENGTH_LONG).show();
+            Log.i("======================", "Player Reg Win");
+            toggleButtons(false);
+        }
+        else if(state == gameState.NATURAL_WIN){
+            user.addBet(2.5);
+            popupMenu("Natural Win!", "You win 2.5x your bet.");
+            //Toast.makeText(this,"Natural Win for player, player wins twice and half the bet", Toast.LENGTH_LONG).show();
+            Log.i("======================", "Player Nat Win");
+            toggleButtons(false);
+        }else if(state == gameState.DRAW){
+            popupMenu("Draw", "You don't lose or win anything.");
+            //Toast.makeText(this,"Draw, house wins. JK no loss for player", Toast.LENGTH_LONG).show();
+            Log.i("======================", "Draw");
+            toggleButtons(false);
+        }
+    }
+
+    //this function updates the imageviews for the cards.
+    private void updateCards(){
+        int id;
+        Card rand;
+        if(playerImageViews != null && dealer != null){
+            for (int i = 0; i < Player.LENGTH; i++) {
+                rand =  user.getHand()[i];
+                id = getResources().getIdentifier(rand.toString(), "drawable", getPackageName());
+                playerImageViews[i].setImageResource(id);
+
+            }
+            TextView tv = (TextView)findViewById(R.id.player_total_textview);
+            tv.setText(Integer.toString(user.getCardTotal()));
+        }
+
+        if(dealerImageViews != null && dealer != null){
+            for (int i = 0; i < Player.LENGTH; i++) {
+                rand =  dealer.getHand()[i];
+                id = getResources().getIdentifier(rand.toString(), "drawable", getPackageName());
+                dealerImageViews[i].setImageResource(id);
+
+            }
+            TextView tv = (TextView)findViewById(R.id.dealer_total_textview);
+            tv.setText(Integer.toString(dealer.getCardTotal()));
+        }
+    }
+
+    //This deals the cards to the player but doesn't update imageview.
+    private void dealCard(Player targetPlayer){
+        Card rand;
+        rand = deck.randomCard();
+        targetPlayer.addCard(rand);
+    }
+
     //This function draws the cards for the dealer.
     private void playDealer(){
         turnCount++;
@@ -229,71 +292,6 @@ public class GameActivity extends AppCompatActivity {
         endGame();
     }
 
-
-    //this function updates the imageviews for the cards.
-    private void updateCards(){
-        int id;
-        Card rand;
-        if(playerImageViews != null && dealer != null){
-            for (int i = 0; i < Player.LENGTH; i++) {
-                rand =  user.getHand()[i];
-                id = getResources().getIdentifier(rand.toString(), "drawable", getPackageName());
-                playerImageViews[i].setImageResource(id);
-
-            }
-            TextView tv = (TextView)findViewById(R.id.player_total_textview);
-            tv.setText(Integer.toString(user.getCardTotal()));
-        }
-
-        if(dealerImageViews != null && dealer != null){
-            for (int i = 0; i < Player.LENGTH; i++) {
-                rand =  dealer.getHand()[i];
-                id = getResources().getIdentifier(rand.toString(), "drawable", getPackageName());
-                dealerImageViews[i].setImageResource(id);
-
-            }
-            TextView tv = (TextView)findViewById(R.id.dealer_total_textview);
-            tv.setText(Integer.toString(dealer.getCardTotal()));
-        }
-    }
-
-    //This deals the cards to the player but doesn't update imageview.
-    private void dealCard(Player targetPlayer){
-        Card rand;
-        rand = deck.randomCard();
-        targetPlayer.addCard(rand);
-    }
-
-
-    //Ends the game if the game is in a final state.
-    private void endGame() {
-        if(state == gameState.DEALER_WIN){
-            user.addBet(-1.0);
-            popupMenu("Dealer Wins", "You lose your bet.");
-            //Toast.makeText(this,"Dealer Wins, player looses bet", Toast.LENGTH_LONG).show();
-            Log.i("======================", "Dealer Wins");
-            toggleButtons(false);
-        } else if( state == gameState.PLAYER_WIN){
-            user.addBet(2.0);
-            popupMenu("Player Wins", "You win 2x your bet.");
-            //Toast.makeText(this,"Player Wins, player wins twice bet", Toast.LENGTH_LONG).show();
-            Log.i("======================", "Player Reg Win");
-            toggleButtons(false);
-        }
-        else if(state == gameState.NATURAL_WIN){
-            user.addBet(2.5);
-            popupMenu("Natural Win!", "You win 2.5x your bet.");
-            //Toast.makeText(this,"Natural Win for player, player wins twice and half the bet", Toast.LENGTH_LONG).show();
-            Log.i("======================", "Player Nat Win");
-            toggleButtons(false);
-        }else if(state == gameState.DRAW){
-            popupMenu("Draw", "You don't lose or win anything.");
-            //Toast.makeText(this,"Draw, house wins. JK no loss for player", Toast.LENGTH_LONG).show();
-            Log.i("======================", "Draw");
-            toggleButtons(false);
-        }
-    }
-
     //Toggles the buttons
     private void toggleButtons(boolean isEnabled){
         Button b = (Button) findViewById(R.id.hit_button);
@@ -302,6 +300,7 @@ public class GameActivity extends AppCompatActivity {
         b.setEnabled(isEnabled);
     }
 
+    //This is the end game popmenu where the player decides what to do.
     private void popupMenu(String title, String message){
         AlertDialog.Builder popup = new AlertDialog.Builder(GameActivity.this);
 
@@ -343,6 +342,7 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    //This is for saving and resuming the game.
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
