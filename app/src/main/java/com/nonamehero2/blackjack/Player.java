@@ -66,7 +66,6 @@ public class Player implements Serializable{
     }
 
     public int getCardTotal() {
-        calculateTotal();
         return cardTotal;
     }
 
