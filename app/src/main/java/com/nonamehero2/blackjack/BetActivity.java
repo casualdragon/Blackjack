@@ -24,20 +24,21 @@ public class BetActivity extends AppCompatActivity {
 
         final EditText et = (EditText) findViewById(R.id.bet_editText);
         final TextView total_et = (TextView) findViewById(R.id.total_textView);
+        TextView tv = (TextView) findViewById(R.id.total_textView);
+
+        final String sTotal = tv.getText().toString();
+        final int total = Integer.parseInt(sTotal);
+        final int bet = Integer.parseInt(et.getText().toString());
 
         //Setting up the buttons
         findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView tv = (TextView) findViewById(R.id.total_textView);
-                String sBet = et.getText().toString();
-                String sTotal = tv.getText().toString();
-                int bet = Integer.parseInt(sBet);
-                int total = Integer.parseInt(sTotal);
-                    bet += 100;
-                if(bet <= total) {
-                    et.setText(Integer.toString(bet));
-                    total_et.setText(Integer.toString(total + bet));
+                int bet_ = bet;
+                bet_ += 100;
+                if(bet_ <= total) {
+                    et.setText(Integer.toString(bet_));
+                    total_et.setText(Integer.toString(total - bet_));
                 }else{
                     Toast.makeText(getApplicationContext(), "The bet cannot exceed the total.",Toast.LENGTH_LONG).show();
                 }
@@ -47,14 +48,11 @@ public class BetActivity extends AppCompatActivity {
         findViewById(R.id.subtract_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TextView tv = (TextView) findViewById(R.id.total_textView);
-                int bet = Integer.parseInt(et.getText().toString());
-                String sTotal = tv.getText().toString();
-                int total = Integer.parseInt(sTotal);
-                bet -= 100;
-                if(bet > 0 || bet < 10000)  {
-                    et.setText(Integer.toString(bet));
-                    total_et.setText(Integer.toString(total - bet));
+                int bet_ = bet;
+                bet_ -= 100;
+                if(bet_ > 0 || bet_ < total)  {
+                    et.setText(Integer.toString(bet_));
+                    total_et.setText(Integer.toString(total + bet_));
                 }else{
                     Toast.makeText(getApplicationContext(), "The bet cannot be less than 0 or greater than the start total.",Toast.LENGTH_LONG).show();
                 }

@@ -1,7 +1,5 @@
 package com.nonamehero2.blackjack;
 
-import android.util.Log;
-
 import java.util.Random;
 
 /**
@@ -46,9 +44,7 @@ public class Deck {
             if(card == 0){
                 card = 1;
             }
-
             for (int i = 0; i < position; i++) {
-                Log.i("======================", "card:" + past[i].toString());
                 if (deck[suit][card] == past[i]) {
                     flag = false;
                 }
@@ -63,10 +59,6 @@ public class Deck {
             position = 0;
         }
         past[position] = new Card(suit, card);
-
-        //For debugging
-        Log.i("======================", "suit:" + Integer.toString(suit));
-        Log.i("======================", "card:" + Integer.toString(card));
         return deck[suit][card];
     }
 }
