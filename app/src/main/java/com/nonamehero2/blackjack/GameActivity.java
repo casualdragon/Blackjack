@@ -312,7 +312,7 @@ public class GameActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 deck = new Deck();
                 dealer = new Player();
-                user.blankHand();
+                user.resetHand();
                 startGame();
                 toggleButtons(true);
             }

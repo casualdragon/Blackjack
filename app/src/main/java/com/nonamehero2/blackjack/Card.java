@@ -24,6 +24,11 @@ import java.io.Serializable;
 
 
 public class Card implements Serializable{
+    private int suit;
+    private int cardNum;
+
+    //Only constructor.
+    //Creates the card.
     public Card(int suit, int cardNum) {
         if(suit >= 0 && suit <= 3){
             this.suit = suit;
@@ -37,15 +42,14 @@ public class Card implements Serializable{
         }
     }
 
+    //Getters
     public int getSuite() { return suit; }
 
     public int getCardNum() {
         return cardNum;
     }
 
-    private int suit;
-    private int cardNum;
-
+    //Methods
     @Override
     public String toString() {
         return String.format("card%1$s%2$s", Integer.toString(suit), Integer.toString(cardNum));
