@@ -77,7 +77,7 @@
             android:fontFamily="serif" />
 
         <TextView
-            android:text="1000"
+            android:text="10000"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/total_textView"

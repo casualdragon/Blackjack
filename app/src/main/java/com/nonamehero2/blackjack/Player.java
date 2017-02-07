@@ -1,10 +1,16 @@
 package com.nonamehero2.blackjack;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.IOException;
+import java.io.Serializable;
+
 /**
  * Created by Zachary Taylor on 1/31/2017.
  */
 
-public class Player {
+public class Player implements Serializable{
     //Fields
     static final int LENGTH = 5;
     private Card[] hand = new Card[5];
@@ -21,6 +27,20 @@ public class Player {
         this.currentBet = currentBet;
         this.position = 0;
     }
+    public Player(int currentBet, int money, int cardTotal, int position, Card[] hand){
+        this.money = money;
+        this.cardTotal = cardTotal;
+        this.currentBet = currentBet;
+        this.position = position;
+        for(int i = 0; i < LENGTH; i++){
+            if (i < position){
+                this.hand[i] = hand[i];
+            }else{
+                hand[i] = new Card(0, 0);
+            }
+        }
+    }
+
     public Player(){
         blankHand();
         this.money = 0;
@@ -118,4 +138,7 @@ public class Player {
     public void resetHand(){
         position = 0;
     }
+
+    //These methods are used by Serializable
+
 }

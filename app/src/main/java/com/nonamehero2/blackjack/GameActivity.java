@@ -38,25 +38,35 @@ public class GameActivity extends AppCompatActivity {
     private ImageView [] dealerImageViews;
     private Player user;
     private Player dealer;
+    private int bet = 0;
+
+    //String Keys for the Bundles
+    final private String USER = "user";
+    final private String DEALER = "dealer";
+    final private String BET = "bet";
+    final private String TURNCOUNT = "turnCount";
+    final private String STATE = "state";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        playerImageViews = new ImageView[5];
-        playerImageViews[0] = (ImageView) findViewById(R.id.player_imageview1);
-        playerImageViews[1] = (ImageView) findViewById(R.id.player_imageview2);
-        playerImageViews[2] = (ImageView) findViewById(R.id.player_imageview3);
-        playerImageViews[3] = (ImageView) findViewById(R.id.player_imageview4);
-        playerImageViews[4] = (ImageView) findViewById(R.id.player_imageview5);
+        if(savedInstanceState == null) {
 
-        dealerImageViews = new ImageView[5];
-        dealerImageViews[0] = (ImageView) findViewById(R.id.dealer_imageview1);
-        dealerImageViews[1] = (ImageView) findViewById(R.id.dealer_imageview2);
-        dealerImageViews[2] = (ImageView) findViewById(R.id.dealer_imageview3);
-        dealerImageViews[3] = (ImageView) findViewById(R.id.dealer_imageview4);
-        dealerImageViews[4] = (ImageView) findViewById(R.id.dealer_imageview5);
+            playerImageViews = new ImageView[5];
+            playerImageViews[0] = (ImageView) findViewById(R.id.player_imageview1);
+            playerImageViews[1] = (ImageView) findViewById(R.id.player_imageview2);
+            playerImageViews[2] = (ImageView) findViewById(R.id.player_imageview3);
+            playerImageViews[3] = (ImageView) findViewById(R.id.player_imageview4);
+            playerImageViews[4] = (ImageView) findViewById(R.id.player_imageview5);
+
+            dealerImageViews = new ImageView[5];
+            dealerImageViews[0] = (ImageView) findViewById(R.id.dealer_imageview1);
+            dealerImageViews[1] = (ImageView) findViewById(R.id.dealer_imageview2);
+            dealerImageViews[2] = (ImageView) findViewById(R.id.dealer_imageview3);
+            dealerImageViews[3] = (ImageView) findViewById(R.id.dealer_imageview4);
+            dealerImageViews[4] = (ImageView) findViewById(R.id.dealer_imageview5);
 
 
 
@@ -65,12 +75,33 @@ public class GameActivity extends AppCompatActivity {
             card.setImageResource(R.drawable.card00);
         }
 
-        for (ImageView card: dealerImageViews) {
-            card.setImageResource(R.drawable.card00);
-        }
+            for (ImageView card : dealerImageViews) {
+                card.setImageResource(R.drawable.card00);
+            }
 
-        Intent intent = getIntent();
-        int bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
+            Intent intent = getIntent();
+            bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
+
+            user = new Player(bet);
+            dealer = new Player();
+            deck = new Deck();
+
+            dealInitialCards();
+
+        }else{
+            state = (gameState) savedInstanceState.getSerializable(STATE);
+            user = (Player) savedInstanceState.getSerializable(USER);
+            dealer = (Player) savedInstanceState.getSerializable(DEALER);
+            turnCount = (int)savedInstanceState.getSerializable(TURNCOUNT);
+            bet = (int) savedInstanceState.getSerializable(BET);
+
+            // Debugging Information
+            Log.i("=============", "Accessing bundle");
+            Log.i("===============", "state: " + state);
+            Log.i("=============", "user: " + user.getHand()[0]);
+            Log.i("=================", "turncount:" + Integer.toString(turnCount));
+            Log.i("=================", "bet:" + Integer.toString(bet));
+        }
         /*
             Checks for any error with the number returned by the intent.
             If there is any error, the user is returned to the main screen
@@ -315,5 +346,14 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
+        outState.putSerializable(USER, user);
+        outState.putSerializable(DEALER, dealer);
+        outState.putSerializable(BET, bet);
+        outState.putSerializable(TURNCOUNT, turnCount);
+        outState.putSerializable(STATE, state);
+    }
 }
