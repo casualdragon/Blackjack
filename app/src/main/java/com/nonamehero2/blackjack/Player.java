@@ -1,9 +1,7 @@
 package com.nonamehero2.blackjack;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.util.Log;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -19,19 +17,23 @@ public class Player implements Serializable{
     private int cardTotal;
     private int position;
 
+    //This is the constructor for the player class when the user needs a bet.
     public Player(int currentBet) {
         //blanks the cards
-        blankHand();
+        resetHand();
         this.money = 10000;
         this.cardTotal = 0;
         this.currentBet = currentBet;
         this.position = 0;
     }
+
+    //This is general constructor for the player class.
     public Player(int currentBet, int money, int cardTotal, int position, Card[] hand){
         this.money = money;
         this.cardTotal = cardTotal;
         this.currentBet = currentBet;
         this.position = position;
+
         for(int i = 0; i < LENGTH; i++){
             if (i < position){
                 this.hand[i] = hand[i];
@@ -41,29 +43,26 @@ public class Player implements Serializable{
         }
     }
 
+    //This is the default constructor for the player class.
     public Player(){
-        blankHand();
+        resetHand();
         this.money = 0;
         this.cardTotal = 0;
         this.currentBet = 0;
         this.position = 0;
     }
 
-    //Getters and Setters
-    public int getMoney() {
-        return money;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
+    //Getters
+    public Card[] getHand() {
+        return hand;
     }
 
     public int getCurrentBet() {
         return currentBet;
     }
 
-    public void setCurrentBet(int currentBet) {
-        this.currentBet = currentBet;
+    public int getMoney() {
+        return money;
     }
 
     public int getCardTotal() {
@@ -71,18 +70,35 @@ public class Player implements Serializable{
         return cardTotal;
     }
 
-    public Card[] getHand() {
-        return hand;
-    }
+    public int getPosition(){return position;}
 
+
+    //Setters
     public void setHand(Card[] hand) {
         this.hand = hand;
     }
 
-    public int getPosition(){return position;}
+    public void setCurrentBet(int currentBet) {
+        this.currentBet = currentBet;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
 
     //Methods
-    public void blankHand() {
+    //Adds a card to the users hand.
+    public void addCard(Card card){
+        if(position < LENGTH){
+            hand[position] = card;
+            position++;
+        }else{
+            throw new IllegalArgumentException("hand must be not exceed 5");
+        }
+    }
+
+    //Resets the cards in the hand and sets the position to 0.
+    public void resetHand() {
         for (int i = 0; i < LENGTH; i++) {
             hand[i] = new Card(0, 0);
         }
@@ -90,6 +106,7 @@ public class Player implements Serializable{
         position = 0;
     }
 
+    //Calculates the players score.
     public void calculateTotal(){
         int aceCount = 0;
         cardTotal = 0;
@@ -113,11 +130,8 @@ public class Player implements Serializable{
             }
         }
     }
-    /*
-        This method is used to subtract the bet from the
-        player's total, and returns a boolean value to check
-        if the total is greater than the bet
-     */
+
+    //Adds the bet with a factor that changes based on how the player won.
     public boolean addBet(double factor){
         if(money >= currentBet){
             money = money +  (int)(currentBet * factor);
@@ -126,19 +140,5 @@ public class Player implements Serializable{
             return false;
         }
     }
-
-    public void addCard(Card card){
-        if(position < LENGTH){
-            hand[position] = card;
-            position++;
-        }else{
-            throw new IllegalArgumentException("hand must be not exceed 5");
-        }
-    }
-    public void resetHand(){
-        position = 0;
-    }
-
-    //These methods are used by Serializable
 
 }
