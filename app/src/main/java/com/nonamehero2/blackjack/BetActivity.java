@@ -23,6 +23,7 @@ public class BetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bet);
 
         final EditText et = (EditText) findViewById(R.id.bet_editText);
+        final TextView total_et = (TextView) findViewById(R.id.total_textView);
 
         //Setting up the buttons
         findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
@@ -35,7 +36,8 @@ public class BetActivity extends AppCompatActivity {
                 int total = Integer.parseInt(sTotal);
                     bet += 100;
                 if(bet <= total) {
-                    et.setText(new Integer(bet).toString());
+                    et.setText(Integer.toString(bet));
+                    total_et.setText(Integer.toString(total + bet));
                 }else{
                     Toast.makeText(getApplicationContext(), "The bet cannot exceed the total.",Toast.LENGTH_LONG).show();
                 }
@@ -45,12 +47,16 @@ public class BetActivity extends AppCompatActivity {
         findViewById(R.id.subtract_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TextView tv = (TextView) findViewById(R.id.total_textView);
                 int bet = Integer.parseInt(et.getText().toString());
+                String sTotal = tv.getText().toString();
+                int total = Integer.parseInt(sTotal);
                 bet -= 100;
-                if(bet > 0) {
-                    et.setText(new Integer(bet).toString());
+                if(bet > 0 || bet < 10000)  {
+                    et.setText(Integer.toString(bet));
+                    total_et.setText(Integer.toString(total - bet));
                 }else{
-                    Toast.makeText(getApplicationContext(), "The bet cannot be less than 0.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "The bet cannot be less than 0 or greater than the start total.",Toast.LENGTH_LONG).show();
                 }
             }
         });
