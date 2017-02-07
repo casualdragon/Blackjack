@@ -1,5 +1,7 @@
 package com.nonamehero2.blackjack;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -84,23 +86,7 @@ public class GameActivity extends AppCompatActivity {
         dealer = new Player();
         deck = new Deck();
 
-
-        //Initial cards
-        dealCard(user);
-        dealCard(dealer);
-        dealCard(user);
-        dealCard(dealer);
-
-        updateCards();
-        turnCount = 2;
-        state = gameState.NO_WIN;
-
-        //Check for natural 21 for dealer and player
-        checkScores(true);
-
-
-
-
+        dealInitialCards();
 
 
         findViewById(R.id.hit_button).setOnClickListener(new View.OnClickListener() {
@@ -126,6 +112,22 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //This function does the initial deal for the game by drawing two cards for both players.
+    private void dealInitialCards() {
+        //Initial cards
+        dealCard(user);
+        dealCard(dealer);
+        dealCard(user);
+        dealCard(dealer);
+
+        updateCards();
+        turnCount = 2;
+        state = gameState.NO_WIN;
+
+        //Check for natural 21 for dealer and player
+        checkScores(true);
     }
 
     //This function draws the cards for the dealer.
@@ -233,32 +235,75 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
+    //Ends the game if the game is in a final state.
     private void endGame() {
         if(state == gameState.DEALER_WIN){
-            Toast.makeText(this,"Dealer Wins, player looses bet", Toast.LENGTH_LONG).show();
+            popupMenu("Dealer Wins", "You lose your bet.");
+            //Toast.makeText(this,"Dealer Wins, player looses bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Dealer Wins");
             toggleButtons(false);
         } else if( state == gameState.PLAYER_WIN){
-            Toast.makeText(this,"Player Wins, player wins twice bet", Toast.LENGTH_LONG).show();
+            popupMenu("Player Wins", "You win 2x your bet.");
+            //Toast.makeText(this,"Player Wins, player wins twice bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Player Reg Win");
             toggleButtons(false);
         }
         else if(state == gameState.NATURAL_WIN){
-            Toast.makeText(this,"Natural Win for player, player wins twice and half the bet", Toast.LENGTH_LONG).show();
+            popupMenu("Natural Win!", "You win 2.5x your bet.");
+            //Toast.makeText(this,"Natural Win for player, player wins twice and half the bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Player Nat Win");
             toggleButtons(false);
         }else if(state == gameState.DRAW){
-            Toast.makeText(this,"Draw, house wins. JK no loss for player", Toast.LENGTH_LONG).show();
+            popupMenu("Draw", "You don't lose or win anything.");
+            //Toast.makeText(this,"Draw, house wins. JK no loss for player", Toast.LENGTH_LONG).show();
             Log.i("======================", "Draw");
             toggleButtons(false);
         }
     }
 
+    //Toggles the buttons
     private void toggleButtons(boolean isEnabled){
         Button b = (Button) findViewById(R.id.hit_button);
         b.setEnabled(isEnabled);
         b= (Button) findViewById(R.id.stay_button);
         b.setEnabled(isEnabled);
+    }
+
+    private void popupMenu(String title, String message){
+        AlertDialog.Builder popup = new AlertDialog.Builder(GameActivity.this);
+
+        popup.setTitle(title);
+        popup.setMessage(message);
+
+        popup.setPositiveButton("Conintue\nPlaying", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deck = new Deck();
+                dealer = new Player();
+                user.blankHand();
+                dealInitialCards();
+                toggleButtons(true);
+            }
+        });
+
+        popup.setNegativeButton("Change\nBet", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Goes to bet screen
+            }
+        });
+
+        popup.setNeutralButton("Main\nMenu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Goes to main menu
+            }
+        });
+
+        AlertDialog dialog = popup.create();
+        dialog.setCancelable(false);
+        dialog.show();
+
     }
 
 

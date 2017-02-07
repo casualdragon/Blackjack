@@ -66,6 +66,8 @@ public class Player {
         for (int i = 0; i < LENGTH; i++) {
             hand[i] = new Card(0, 0);
         }
+        calculateTotal();
+        position = 0;
     }
 
     public void calculateTotal(){
