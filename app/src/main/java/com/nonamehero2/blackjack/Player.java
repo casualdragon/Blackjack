@@ -1,5 +1,7 @@
 package com.nonamehero2.blackjack;
 
+import android.util.Log;
+
 import java.io.Serializable;
 
 /**
@@ -67,6 +69,9 @@ public class Player implements Serializable{
         calculateTotal();
         return cardTotal;
     }
+
+    public int getPosition(){return position;}
+
 
     //Setters
     public void setHand(Card[] hand) {

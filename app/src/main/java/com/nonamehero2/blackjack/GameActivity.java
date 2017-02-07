@@ -136,6 +136,7 @@ public class GameActivity extends AppCompatActivity {
                     checkScores(false);
                 }else {
                     state = gameState.PLAYER_STAND;
+                    checkScores(false);
                     playDealer();
                 }
             }
@@ -152,7 +153,6 @@ public class GameActivity extends AppCompatActivity {
         dealCard(dealer);
 
         updateCards();
-        turnCount = 2;
         state = gameState.NO_WIN;
 
         //Check for natural 21 for dealer and player
@@ -161,27 +161,29 @@ public class GameActivity extends AppCompatActivity {
 
     //Ends the game if the game is in a final state.
     private void endGame() {
+        updateCards();
         if(state == gameState.DEALER_WIN){
             user.addBet(-1.0);
-            popupMenu("Dealer Wins", "You lose your bet.");
+            popupMenu("Dealer Wins", String.format("You lose your bet. %s to %s", user.getCardTotal(),dealer.getCardTotal()));
             //Toast.makeText(this,"Dealer Wins, player looses bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Dealer Wins");
             toggleButtons(false);
         } else if( state == gameState.PLAYER_WIN){
             user.addBet(2.0);
-            popupMenu("Player Wins", "You win 2x your bet.");
+            popupMenu("Player Wins", String.format("You win 2x your bet. %s to %s", user.getCardTotal(),dealer.getCardTotal()));
             //Toast.makeText(this,"Player Wins, player wins twice bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Player Reg Win");
             toggleButtons(false);
         }
         else if(state == gameState.NATURAL_WIN){
             user.addBet(2.5);
-            popupMenu("Natural Win!", "You win 2.5x your bet.");
+            popupMenu("Player Wins", String.format("You win 2.5x your bet. %s to %s", user.getCardTotal(),dealer.getCardTotal()));
+
             //Toast.makeText(this,"Natural Win for player, player wins twice and half the bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Player Nat Win");
             toggleButtons(false);
         }else if(state == gameState.DRAW){
-            popupMenu("Draw", "You don't lose or win anything.");
+            popupMenu("Draw", String.format("You don't win anything. %s to %s", user.getCardTotal(),dealer.getCardTotal()));
             //Toast.makeText(this,"Draw, house wins. JK no loss for player", Toast.LENGTH_LONG).show();
             Log.i("======================", "Draw");
             toggleButtons(false);
@@ -225,19 +227,21 @@ public class GameActivity extends AppCompatActivity {
         Card rand;
         rand = deck.randomCard();
         targetPlayer.addCard(rand);
+
+        turnCount = user.getPosition();
+        if(dealer.getPosition() > turnCount){
+            turnCount = dealer.getPosition();
+        }
     }
 
     //This function draws the cards for the dealer.
     private void playDealer(){
-        turnCount++;
         if(dealer.getCardTotal() > 17 && state != gameState.PLAYER_STAND){
             state = gameState.DEALER_STAND;
         }
 
         if (state != gameState.DEALER_STAND) {
-            if(turnCount < Player.LENGTH) {
-                dealCard(dealer);
-            }
+             dealCard(dealer);
         }
 
 
@@ -249,6 +253,19 @@ public class GameActivity extends AppCompatActivity {
 
     //This function is the main logic behind the scoring system.
     private void checkScores(boolean isFirstCheck) {
+        Card [] hand = dealer.getHand();
+        Log.i ("=======", "Dealer Hand");
+        for(int i = 0; i < Player.LENGTH; i++){
+            Log.i ("=======", hand [i].toString());
+        }
+        Log.i ("=======", "Total = " + dealer.getCardTotal());
+
+        hand = user.getHand();
+        Log.i ("=======", "Player Hand");
+        for(int i = 0; i < Player.LENGTH; i++){
+            Log.i ("=======", hand [i].toString());
+        }
+        Log.i ("=======", "Total = " + user.getCardTotal());
         // The game must move to an end state with either winning or a draw from this statement
         if(dealer.getCardTotal() >= 21 || user.getCardTotal() >= 21){
 
