@@ -69,10 +69,10 @@ public class GameActivity extends AppCompatActivity {
             dealerImageViews[4] = (ImageView) findViewById(R.id.dealer_imageview5);
 
 
-        //Sets imageviews to blank card
-        for (ImageView card: playerImageViews) {
-            card.setImageResource(R.drawable.card00);
-        }
+            //Sets imageviews to blank card
+            for (ImageView card: playerImageViews) {
+              card.setImageResource(R.drawable.card00);
+            }
 
             for (ImageView card : dealerImageViews) {
                 card.setImageResource(R.drawable.card00);
@@ -83,7 +83,7 @@ public class GameActivity extends AppCompatActivity {
             deck = new Deck();
 
 
-             startGame();
+            startGame();
 
         }else{
             state = (gameState) savedInstanceState.getSerializable(STATE);
@@ -189,6 +189,7 @@ public class GameActivity extends AppCompatActivity {
 
         TextView moneyView = (TextView) findViewById(R.id.money_amount_textview);
         moneyView.setText("$" + user.getMoney());
+        state = gameState.NO_WIN;
 
     }
 
@@ -272,13 +273,13 @@ public class GameActivity extends AppCompatActivity {
          * If the player stands and they are down the player loses otherwise the game plays until
          * the dealer is higher or the dealer wins.
          */
-        }else if(state == gameState.DEALER_STAND){
+        }else if(state == gameState.DEALER_STAND && turnCount < Player.LENGTH){
             if(dealer.getCardTotal() <= user.getCardTotal()){
                 state = gameState.NO_WIN;
                 playDealer();
             }
         }
-        else if (state == gameState.PLAYER_STAND){
+        else if (state == gameState.PLAYER_STAND && turnCount < Player.LENGTH){
             if(dealer.getCardTotal() < user.getCardTotal()){
                 playDealer();
             }else if (dealer.getCardTotal() > user.getCardTotal()){
@@ -287,9 +288,17 @@ public class GameActivity extends AppCompatActivity {
             else if(dealer.getCardTotal() == user.getCardTotal()){
                 state = gameState.DRAW;
             }
+        }else if(turnCount >= Player.LENGTH && state == gameState.PLAYER_STAND){
+            if(user.getCardTotal() > dealer.getCardTotal()){
+                state = gameState.PLAYER_WIN;
+            }
+            else if( user.getCardTotal() < dealer.getCardTotal()){
+                state = gameState.DEALER_WIN;
+            }
         }
         else if( turnCount >= Player.LENGTH){
             state = gameState.DRAW;
+
         }
 
         endGame();
