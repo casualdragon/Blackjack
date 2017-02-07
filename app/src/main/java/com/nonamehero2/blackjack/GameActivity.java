@@ -108,6 +108,8 @@ public class GameActivity extends AppCompatActivity {
         Intent intent = getIntent();
         bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
 
+        user.setCurrentBet(bet);
+
         if(bet == 0){
             Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
             Intent ret = new Intent(getApplicationContext(), MainActivity.class);
@@ -142,9 +144,6 @@ public class GameActivity extends AppCompatActivity {
 
     //This function does the initial deal for the game by drawing two cards for both players.
     private void startGame() {
-
-        TextView moneyView = (TextView) findViewById(R.id.money_amount_textview);
-        moneyView.setText("$" + user.getMoney());
 
         //Initial cards
         dealCard(user);
@@ -187,6 +186,10 @@ public class GameActivity extends AppCompatActivity {
             Log.i("======================", "Draw");
             toggleButtons(false);
         }
+
+        TextView moneyView = (TextView) findViewById(R.id.money_amount_textview);
+        moneyView.setText("$" + user.getMoney());
+
     }
 
     //this function updates the imageviews for the cards.
