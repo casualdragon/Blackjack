@@ -2,6 +2,8 @@ package com.nonamehero2.blackjack;
 
 import android.util.Log;
 
+import java.io.Serializable;
+
 /**
  * Created by Zachary Taylor on 1/27/2017.
  * Suit is a numerical representation of the 4 suits from 0 to 3.
@@ -21,7 +23,7 @@ import android.util.Log;
  */
 
 
-public class Card {
+public class Card implements Serializable{
     public Card(int suit, int cardNum) {
         if(suit >= 0 && suit <= 3){
             this.suit = suit;
