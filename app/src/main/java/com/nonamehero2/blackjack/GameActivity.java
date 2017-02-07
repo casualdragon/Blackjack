@@ -68,10 +68,12 @@ public class GameActivity extends AppCompatActivity {
             dealerImageViews[3] = (ImageView) findViewById(R.id.dealer_imageview4);
             dealerImageViews[4] = (ImageView) findViewById(R.id.dealer_imageview5);
 
-            //Sets imageviews to blank card
-            for (ImageView card : playerImageViews) {
-                card.setImageResource(R.drawable.card00);
-            }
+
+
+        //Sets imageviews to blank card
+        for (ImageView card: playerImageViews) {
+            card.setImageResource(R.drawable.card00);
+        }
 
             for (ImageView card : dealerImageViews) {
                 card.setImageResource(R.drawable.card00);
@@ -113,15 +115,11 @@ public class GameActivity extends AppCompatActivity {
         TextView bet_tv = (TextView)findViewById(R.id.bet_game_textView);
         bet_tv.setText(Integer.toString(bet));
 
-        updateCards();
+        user = new Player(bet);
+        dealer = new Player();
+        deck = new Deck();
 
-
-        //Check for natural 21 for dealer and player
-        checkScores(true);
-
-
-
-
+        startGame();
 
 
         findViewById(R.id.hit_button).setOnClickListener(new View.OnClickListener() {
@@ -150,7 +148,11 @@ public class GameActivity extends AppCompatActivity {
     }
 
     //This function does the initial deal for the game by drawing two cards for both players.
-    private void dealInitialCards() {
+    private void startGame() {
+
+        TextView moneyView = (TextView) findViewById(R.id.money_amount_textview);
+        moneyView.setText("$" + user.getCurrentBet());
+
         //Initial cards
         dealCard(user);
         dealCard(dealer);
@@ -179,7 +181,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
 
-        Log.i("===============STATE", state.toString());
+        Log.i("=================STATE", state.toString());
         updateCards();
         checkScores(false);
 
@@ -273,17 +275,20 @@ public class GameActivity extends AppCompatActivity {
     //Ends the game if the game is in a final state.
     private void endGame() {
         if(state == gameState.DEALER_WIN){
+            user.addBet(-1.0);
             popupMenu("Dealer Wins", "You lose your bet.");
             //Toast.makeText(this,"Dealer Wins, player looses bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Dealer Wins");
             toggleButtons(false);
         } else if( state == gameState.PLAYER_WIN){
+            user.addBet(2.0);
             popupMenu("Player Wins", "You win 2x your bet.");
             //Toast.makeText(this,"Player Wins, player wins twice bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Player Reg Win");
             toggleButtons(false);
         }
         else if(state == gameState.NATURAL_WIN){
+            user.addBet(2.5);
             popupMenu("Natural Win!", "You win 2.5x your bet.");
             //Toast.makeText(this,"Natural Win for player, player wins twice and half the bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Player Nat Win");
@@ -316,7 +321,7 @@ public class GameActivity extends AppCompatActivity {
                 deck = new Deck();
                 dealer = new Player();
                 user.blankHand();
-                dealInitialCards();
+                startGame();
                 toggleButtons(true);
             }
         });

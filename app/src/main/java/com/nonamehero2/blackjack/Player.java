@@ -118,9 +118,9 @@ public class Player implements Serializable{
         player's total, and returns a boolean value to check
         if the total is greater than the bet
      */
-    public boolean subtractBet (){
+    public boolean addBet(double factor){
         if(money >= currentBet){
-            money = money - currentBet;
+            money = money +  (int)(currentBet * factor);
             return true;
         }else{
             return false;
