@@ -6,7 +6,7 @@ package com.nonamehero2.blackjack;
 
 public class Player {
     //Fields
-    private final int length = 5;
+    static final int LENGTH = 5;
     private Card[] hand = new Card[5];
     private int money;
     private int currentBet;
@@ -14,12 +14,15 @@ public class Player {
     private int position;
 
     public Player(int currentBet) {
+        //blanks the cards
+        blankHand();
         this.money = 10000;
         this.cardTotal = 0;
         this.currentBet = currentBet;
         this.position = 0;
     }
     public Player(){
+        blankHand();
         this.money = 0;
         this.cardTotal = 0;
         this.currentBet = 0;
@@ -44,6 +47,7 @@ public class Player {
     }
 
     public int getCardTotal() {
+        calculateTotal();
         return cardTotal;
     }
 
@@ -58,11 +62,15 @@ public class Player {
     public int getPosition(){return position;}
 
     //Methods
+    public void blankHand() {
+        for (int i = 0; i < LENGTH; i++) {
+            hand[i] = new Card(0, 0);
+        }
+    }
+
     public void calculateTotal(){
         int aceCount = 0;
-        if(hand == null){
-            return;
-        }
+        cardTotal = 0;
         for (Card card:hand) {
             if(card != null){
                 if(card.getCardNum() == 1){
@@ -98,7 +106,7 @@ public class Player {
     }
 
     public void addCard(Card card){
-        if(position < length){
+        if(position < LENGTH){
             hand[position] = card;
             position++;
         }else{
