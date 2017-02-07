@@ -120,7 +120,8 @@ public class GameActivity extends AppCompatActivity {
         findViewById(R.id.hit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(turnCount >= Player.LENGTH){
+                if(user.getPosition() >= 5){
+                    state = gameState.PLAYER_STAND;
                     checkScores(false);
                 }else {
                     dealCard(user);
@@ -235,11 +236,6 @@ public class GameActivity extends AppCompatActivity {
         Card rand;
         rand = deck.randomCard();
         targetPlayer.addCard(rand);
-
-        turnCount = user.getPosition();
-        if(dealer.getPosition() > turnCount){
-            turnCount = dealer.getPosition();
-        }
     }
 
     //This function is the main logic behind the scoring system.
@@ -247,9 +243,7 @@ public class GameActivity extends AppCompatActivity {
         user.calculateTotal();
         dealer.calculateTotal();
 
-        if(turnCount >= Player.LENGTH + 1){
-            state = gameState.DRAW;
-        }else if(user.getCardTotal() > 21 && dealer.getCardTotal() > 21){
+        if(user.getCardTotal() > 21 && dealer.getCardTotal() > 21){
             state = gameState.DRAW;
         } else if(user.getCardTotal() > 21 || dealer.getCardTotal() > 21){
             if(user.getCardTotal() > 21){
@@ -269,8 +263,16 @@ public class GameActivity extends AppCompatActivity {
             if(user.getCardTotal() < dealer.getCardTotal()){
                 state = gameState.DEALER_WIN;
             }else{
-                dealCard(dealer);
-                checkScores(false);
+                if(dealer.getPosition() >= 5){
+                    if(dealer.getCardTotal() > user.getCardTotal()){
+                        state = gameState.DEALER_WIN;
+                    } else {
+                        state = gameState.PLAYER_WIN;
+                    }
+                }else {
+                    dealCard(dealer);
+                    checkScores(false);
+                }
             }
         }
 
