@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -116,13 +118,19 @@ public class GameActivity extends AppCompatActivity {
             Log.i("=================", "turncount:" + Integer.toString(turnCount));
             Log.i("=================", "bet:" + Integer.toString(bet));
         }
-        /*
-            Checks for any error with the number returned by the intent.
-            If there is any error, the user is returned to the main screen
-         */
+
+        int total = 0;
         Intent intent = getIntent();
-        bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
-        int total = intent.getIntExtra(BetActivity.TOTAL, 0);
+        if(intent.hasExtra(BetActivity.BET_KEY)&& (state != gameState.DEALER_WIN || state != gameState.PLAYER_WIN)) {
+            bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
+            total = intent.getIntExtra(BetActivity.TOTAL, 0);
+        }
+        if(intent.hasExtra(MainActivity.USER)){
+            user = (Player) intent.getSerializableExtra(MainActivity.USER);
+            dealer = (Player) intent.getSerializableExtra(MainActivity.DEALER);
+            bet = user.getCurrentBet();
+            total = user.getMoney();
+        }
 
         TextView textView = (TextView)findViewById(R.id.bet_game_textView);
         textView.setText(Integer.toString(bet));
@@ -133,12 +141,7 @@ public class GameActivity extends AppCompatActivity {
         user.setMoney(total);
 
         user.setCurrentBet(bet);
-
-        if(bet == 0){
-            Toast.makeText(getApplicationContext(), "An error has occurred.", Toast.LENGTH_LONG).show();
-            Intent ret = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(ret);
-        }
+        Log.i("=================", "Bet: "+ Integer.toString(bet));
 
 
         findViewById(R.id.hit_button).setOnClickListener(new View.OnClickListener() {
@@ -346,6 +349,14 @@ public class GameActivity extends AppCompatActivity {
         popup.setNeutralButton("Main\nMenu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+               /* File dir = getFilesDir();
+                File file = new File (dir, FILENAME);
+                if(file.delete()){
+                    Log.i("=================", "File was deleted");
+                }else{
+                    Log.i("=================", "File was NOT deleted");
+                }*/
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
