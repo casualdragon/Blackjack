@@ -5,6 +5,7 @@ package com.nonamehero2.blackjack;
  */
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent gameIntent = getIntent();
+        if(gameIntent.hasExtra(GameActivity.MAIN)){
+
+            File file = new File(getApplicationContext().getFilesDir(), GameActivity.FILENAME);
+            if(file.delete()){
+                Log.i("=================", file.toString() + " was deleted");
+            }else{
+                Log.i("=================",  file.toString() + " was NOT deleted");
+            }
+        }
 
         if(readFile()){
             Intent inte = new Intent(getApplicationContext(), GameActivity.class);
@@ -37,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
             startActivity(inte);
         }
-
 
         //new Card(0,12).toString();
 
