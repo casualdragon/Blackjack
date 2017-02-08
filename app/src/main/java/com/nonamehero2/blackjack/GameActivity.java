@@ -1,6 +1,7 @@
 package com.nonamehero2.blackjack;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Created by Amy on 2/1/2017.
@@ -30,6 +35,7 @@ import android.widget.Toast;
 public class GameActivity extends AppCompatActivity {
 
     private enum gameState {NO_WIN, DEALER_STAND, PLAYER_STAND, PLAYER_WIN, DEALER_WIN, DRAW, NATURAL_WIN}
+    public final static String FILENAME = "blackjack.txt";
 
     private gameState state;
     private int turnCount;
@@ -39,6 +45,8 @@ public class GameActivity extends AppCompatActivity {
     private Player user;
     private Player dealer;
     private int bet = 0;
+
+    final public static String PLAYER = "PLAYER_KEY";
 
     //String Keys for the Bundles
     final private String USER = "user";
@@ -82,9 +90,16 @@ public class GameActivity extends AppCompatActivity {
             dealer = new Player();
             deck = new Deck();
 
-
-            startGame();
-
+            if(readFile()){
+                updateCards();
+                if(user.getPosition() == 1) {
+                    checkScores(true);
+                }else{
+                    checkScores(false);
+                }
+            }else {
+                startGame();
+            }
         }else{
             state = (gameState) savedInstanceState.getSerializable(STATE);
             user = (Player) savedInstanceState.getSerializable(USER);
@@ -107,6 +122,15 @@ public class GameActivity extends AppCompatActivity {
          */
         Intent intent = getIntent();
         bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
+        int total = intent.getIntExtra(BetActivity.TOTAL, 0);
+
+        TextView textView = (TextView)findViewById(R.id.bet_game_textView);
+        textView.setText(Integer.toString(bet));
+
+        TextView textView1 = (TextView) findViewById(R.id.money_amount_textview);
+        Log.i("==============", "Total.Game: " + Integer.toString(total));
+        textView1.setText(Integer.toString(total));
+        user.setMoney(total);
 
         user.setCurrentBet(bet);
 
@@ -314,6 +338,7 @@ public class GameActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(getApplicationContext(), BetActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra(PLAYER, user);
                 startActivity(intent);
             }
         });
@@ -343,5 +368,46 @@ public class GameActivity extends AppCompatActivity {
         outState.putSerializable(BET, bet);
         outState.putSerializable(TURNCOUNT, turnCount);
         outState.putSerializable(STATE, state);
+    }
+
+    private void writeFile(){
+        try{
+            FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(user);
+            oos.writeObject(dealer);
+            oos.writeObject(state);
+
+            oos.close();
+            fos.close();
+
+        }catch (Exception e){
+            Log.i("==============", e.getMessage());
+        }
+    }
+    private boolean readFile(){
+        boolean flag = true;
+        try{
+            FileInputStream fis = openFileInput(FILENAME);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            user = (Player) ois.readObject();
+            dealer = (Player) ois.readObject();
+            state = (gameState) ois.readObject();
+
+            Log.i("================", "state: "+ state.toString());
+
+            fis.close();
+            ois.close();
+
+        }catch (Exception e){
+            flag = false;
+        }
+        return flag;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        writeFile();
     }
 }
