@@ -256,6 +256,9 @@ public class GameActivity extends AppCompatActivity {
         } else if (user.getCardTotal() == 21 || dealer.getCardTotal() == 21){
             if(user.getCardTotal() == 21){
                 state = gameState.PLAYER_WIN;
+                if(isFirstCheck){
+                    state = gameState.NATURAL_WIN;
+                }
             }else{
                 state = gameState.DEALER_WIN;
             }
