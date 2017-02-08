@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +16,11 @@ import android.widget.Toast;
 public class BetActivity extends AppCompatActivity implements View.OnClickListener {
 
     public final static String BET_KEY = "bet";
+    public final static String TOTAL = "total";
     private TextView et;
     private TextView total_et;
     private int total;
-    private int bet;
+    private int totalMoney;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class BetActivity extends AppCompatActivity implements View.OnClickListen
         et = (TextView) findViewById(R.id.bet_editText);
         total_et = (TextView) findViewById(R.id.total_textView);
         total = 10000;
-        bet = 100;
+        int bet = 0;
 
         //Checks for an intent sent from the GameActivity
         Intent intent = getIntent();
@@ -56,26 +56,35 @@ public class BetActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onClick(View view) {
                 int bet = Integer.parseInt(et.getText().toString());
-                Intent intent = new Intent(getApplicationContext(), GameActivity.class);
-                intent.putExtra(BET_KEY, bet);
-                startActivity(intent);
+                if(bet != 0) {
+                    int total2 = Integer.parseInt(total_et.getText().toString());
+                    Intent intent = new Intent(getApplicationContext(), GameActivity.class);
+                    Log.i("==============", "Total.Bet: " + Integer.toString(total2));
+                    intent.putExtra(BET_KEY, bet);
+                    intent.putExtra(TOTAL, total2);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Bet cannot be equal to 0", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
-    private void addCheck( int total, int bet){
-        bet += 100;
-        if(bet <= total) {
+    private void addCheck(int bet){
+        if((bet + 100) <= total) {
+            bet += 100;
+            totalMoney = total - bet;
             et.setText(Integer.toString(bet));
-            total_et.setText(Integer.toString(total - bet));
+            total_et.setText(Integer.toString((totalMoney)));
         }else{
             Toast.makeText(getApplicationContext(), "The bet cannot exceed the total.",Toast.LENGTH_LONG).show();
         }
     }
-    private void subtractCheck(int total, int bet){
-        bet -= 100;
-        if(bet > 0 && bet <= total)  {
+    private void subtractCheck(int bet){
+        if((bet-100) >= 0)  {
+            bet -= 100;
+            totalMoney = total - bet;
             et.setText(Integer.toString(bet));
-            total_et.setText(Integer.toString(total + bet));
+            total_et.setText(Integer.toString((totalMoney)));
         }else{
             Toast.makeText(getApplicationContext(), "The bet cannot be less than 0 or greater than the start total.",Toast.LENGTH_LONG).show();
         }
@@ -83,12 +92,13 @@ public class BetActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
+        int bet = Integer.parseInt(et.getText().toString());
         switch (view.getId()){
             case R.id.add_button:
-                addCheck(total, bet);
+                addCheck(bet);
                 break;
             case R.id.subtract_button:
-                subtractCheck(total, bet);
+                subtractCheck(bet);
                 break;
             default:
                 Toast.makeText(getApplicationContext(), "This button does not exist", Toast.LENGTH_LONG).show();

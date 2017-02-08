@@ -109,9 +109,15 @@ public class GameActivity extends AppCompatActivity {
          */
         Intent intent = getIntent();
         bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
+        int total = intent.getIntExtra(BetActivity.TOTAL, 0);
 
         TextView textView = (TextView)findViewById(R.id.bet_game_textView);
         textView.setText(Integer.toString(bet));
+
+        TextView textView1 = (TextView) findViewById(R.id.money_amount_textview);
+        Log.i("==============", "Total.Game: " + Integer.toString(total));
+        textView1.setText(Integer.toString(total));
+        user.setMoney(total);
 
         user.setCurrentBet(bet);
 
