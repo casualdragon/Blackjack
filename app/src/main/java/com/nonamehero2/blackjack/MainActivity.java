@@ -8,16 +8,30 @@ package com.nonamehero2.blackjack;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+
 public class MainActivity extends AppCompatActivity {
+    public final static String EXISTS_KEY = "file exisit";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+/*
+        These lines of codes creates errors.
+        if(readFile()){
+            Intent inte = new Intent(getApplicationContext(), GameActivity.class);
+            inte.getStringExtra(EXISTS_KEY);
+            startActivity(inte);
+        }
+*/
 
         //new Card(0,12).toString();
 
@@ -54,5 +68,19 @@ public class MainActivity extends AppCompatActivity {
                 System.exit(0);
             }
         });
+    }
+    private boolean readFile(){
+        boolean flag = true;
+        try{
+            FileInputStream fis = openFileInput(GameActivity.FILENAME);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            fis.close();
+            ois.close();
+
+        }catch (Exception e){
+            flag = false;
+        }
+        return flag;
     }
 }
