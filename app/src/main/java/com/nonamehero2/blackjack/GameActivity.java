@@ -60,6 +60,8 @@ public class GameActivity extends AppCompatActivity {
     final private String TURNCOUNT = "turnCount";
     final private String STATE = "state";
 
+    final public static String MAIN = "mainActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -368,16 +370,15 @@ public class GameActivity extends AppCompatActivity {
         popup.setNeutralButton("Main\nMenu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-               /* File dir = getFilesDir();
-                File file = new File (dir, FILENAME);
+                File file = new File(GameActivity.FILENAME);
                 if(file.delete()){
-                    Log.i("=================", "File was deleted");
+                    Log.i("=================", file.toString() + " was deleted");
                 }else{
-                    Log.i("=================", "File was NOT deleted");
-                }*/
-
+                    Log.i("=================",  file.toString() + " was NOT deleted");
+                }
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra(MAIN, MAIN);
                 startActivity(intent);
             }
         });
@@ -436,8 +437,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         writeFile();
     }
 }
