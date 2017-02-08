@@ -131,13 +131,7 @@ public class Player implements Serializable{
     }
 
     //Adds the bet with a factor that changes based on how the player won.
-    public boolean addBet(double factor){
-        if(money >= currentBet){
-            money = money +  (int)(currentBet * factor);
-            return true;
-        }else{
-            return false;
-        }
+    public void addBet(double factor) {
+        money = money + (int) (currentBet * factor);
     }
-
 }

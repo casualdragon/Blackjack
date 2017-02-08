@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -49,6 +51,7 @@ public class GameActivity extends AppCompatActivity {
     private int bet = 0;
 
     final public static String PLAYER = "PLAYER_KEY";
+    final public static String GAME_OVER = "Game Over";
 
     //String Keys for the Bundles
     final private String USER = "user";
@@ -132,15 +135,16 @@ public class GameActivity extends AppCompatActivity {
             total = user.getMoney();
         }
 
-        TextView textView = (TextView)findViewById(R.id.bet_game_textView);
-        textView.setText(Integer.toString(bet));
-
-        TextView textView1 = (TextView) findViewById(R.id.money_amount_textview);
-        Log.i("==============", "Total.Game: " + Integer.toString(total));
-        textView1.setText(Integer.toString(total));
         user.setMoney(total);
-
         user.setCurrentBet(bet);
+
+        TextView betView = (TextView) findViewById(R.id.bet_game_textView);
+        betView.setText(String.format("$%s", user.getCurrentBet()));
+
+        TextView moneyView = (TextView) findViewById(R.id.money_amount_textview);
+        moneyView.setText(String.format("$%s", user.getMoney()));
+
+        Log.i("==============", "Total.Game: " + Integer.toString(total));
         Log.i("=================", "Bet: "+ Integer.toString(bet));
 
 
@@ -171,9 +175,13 @@ public class GameActivity extends AppCompatActivity {
 
         //Initial cards
         dealCard(user);
-        dealCard(dealer);
+        //dealCard(dealer);
         dealCard(user);
-        dealCard(dealer);
+        //dealCard(dealer);
+
+        dealer.addCard(new Card(0,10));
+        dealer.addCard(new Card(0,1));
+
 
         updateCards();
         state = gameState.NO_WIN;
@@ -200,7 +208,13 @@ public class GameActivity extends AppCompatActivity {
 
         if(state == gameState.DEALER_WIN){
             user.addBet(-1.0);
-            popupMenu("Dealer Wins", String.format("You lose your bet. %s to %s", user.getCardTotal(),dealer.getCardTotal()));
+            if(user.getMoney() <= bet){
+                //resets the player.
+                user = new Player(bet);
+                popupMenu(GAME_OVER, "You are out out money.");
+            }else {
+                popupMenu("Dealer Wins", String.format("You lose your bet. %s to %s", user.getCardTotal(), dealer.getCardTotal()));
+            }
             //Toast.makeText(this,"Dealer Wins, player looses bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Dealer Wins");
             toggleButtons(false);
@@ -325,26 +339,31 @@ public class GameActivity extends AppCompatActivity {
         popup.setTitle(title);
         popup.setMessage(message);
 
-        popup.setPositiveButton("Conintue\nPlaying", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                deck = new Deck();
-                dealer = new Player();
-                user.resetHand();
-                startGame();
-                toggleButtons(true);
-            }
-        });
+        if(title != GAME_OVER){
+            popup.setPositiveButton("Conintue\nPlaying", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    if(bet > user.getMoney()){
+                        bet = user.getMoney();
+                    }
+                    deck = new Deck();
+                    dealer = new Player();
+                    user.resetHand();
+                    startGame();
+                    toggleButtons(true);
+                }
+            });
 
-        popup.setNegativeButton("Change\nBet", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(getApplicationContext(), BetActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra(PLAYER, user);
-                startActivity(intent);
-            }
-        });
+            popup.setNegativeButton("Change\nBet", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(getApplicationContext(), BetActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra(PLAYER, user);
+                    startActivity(intent);
+                }
+            });
+        }
 
         popup.setNeutralButton("Main\nMenu", new DialogInterface.OnClickListener() {
             @Override
