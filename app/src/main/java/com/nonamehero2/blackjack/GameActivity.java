@@ -40,6 +40,8 @@ public class GameActivity extends AppCompatActivity {
     private Player dealer;
     private int bet = 0;
 
+    final public static String PLAYER = "PLAYER_KEY";
+
     //String Keys for the Bundles
     final private String USER = "user";
     final private String DEALER = "dealer";
@@ -107,6 +109,9 @@ public class GameActivity extends AppCompatActivity {
          */
         Intent intent = getIntent();
         bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
+
+        TextView textView = (TextView)findViewById(R.id.bet_game_textView);
+        textView.setText(Integer.toString(bet));
 
         user.setCurrentBet(bet);
 
@@ -352,6 +357,7 @@ public class GameActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(getApplicationContext(), BetActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.putExtra(PLAYER, user);
                 startActivity(intent);
             }
         });
