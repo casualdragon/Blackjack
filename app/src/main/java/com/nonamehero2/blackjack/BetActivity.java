@@ -21,6 +21,7 @@ public class BetActivity extends AppCompatActivity implements View.OnClickListen
     private TextView total_et;
     private int total;
     private int totalMoney;
+    private int totalGameMoney = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class BetActivity extends AppCompatActivity implements View.OnClickListen
             Player user;
             user = (Player) intent.getSerializableExtra(GameActivity.PLAYER);
             total = user.getMoney();
+            totalGameMoney = user.getMoney();
             bet = user.getCurrentBet();
             //Debug
             Log.i("===============", "Total: " + Integer.toString(total));
@@ -57,11 +59,13 @@ public class BetActivity extends AppCompatActivity implements View.OnClickListen
             public void onClick(View view) {
                 int bet = Integer.parseInt(et.getText().toString());
                 if(bet != 0) {
-                    int total2 = Integer.parseInt(total_et.getText().toString());
+                    if(totalGameMoney == 0) {
+                        totalGameMoney = Integer.parseInt(total_et.getText().toString());
+                    }
                     Intent intent = new Intent(getApplicationContext(), GameActivity.class);
-                    Log.i("==============", "Total.Bet: " + Integer.toString(total2));
+                    Log.i("==============", "Total.Bet: " + Integer.toString(totalGameMoney));
                     intent.putExtra(BET_KEY, bet);
-                    intent.putExtra(TOTAL, total2);
+                    intent.putExtra(TOTAL, totalGameMoney);
                     startActivity(intent);
                 }else{
                     Toast.makeText(getApplicationContext(), "Bet cannot be equal to 0", Toast.LENGTH_LONG).show();

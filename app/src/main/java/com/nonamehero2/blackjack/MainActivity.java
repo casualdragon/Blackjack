@@ -18,20 +18,26 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
 public class MainActivity extends AppCompatActivity {
-    public final static String EXISTS_KEY = "file exisit";
+
+    private Player user;
+    private Player dealer;
+    public final static String USER = "user";
+    public final static String DEALER = "dealer";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-/*
-        These lines of codes creates errors.
+
+
         if(readFile()){
             Intent inte = new Intent(getApplicationContext(), GameActivity.class);
-            inte.getStringExtra(EXISTS_KEY);
+            inte.putExtra(USER, user);
+            inte.putExtra(DEALER, dealer);
+
             startActivity(inte);
         }
-*/
+
 
         //new Card(0,12).toString();
 
@@ -74,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
         try{
             FileInputStream fis = openFileInput(GameActivity.FILENAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
+            user = (Player) ois.readObject();
+            dealer = (Player) ois.readObject();
+
+            Log.i("=================", "Bet.MainActivity: " + user.getCurrentBet());
 
             fis.close();
             ois.close();
