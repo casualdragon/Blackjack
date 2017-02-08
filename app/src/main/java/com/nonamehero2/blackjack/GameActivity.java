@@ -125,11 +125,12 @@ public class GameActivity extends AppCompatActivity {
         findViewById(R.id.hit_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(turnCount >= Player.LENGTH){
+                if(user.getPosition() >= 5){
+                    state = gameState.PLAYER_STAND;
                     checkScores(false);
                 }else {
                     dealCard(user);
-                    playDealer();
+                    checkScores(false);
                 }
             }
         });
@@ -137,13 +138,8 @@ public class GameActivity extends AppCompatActivity {
         findViewById(R.id.stay_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(state == gameState.DEALER_STAND){
-                    checkScores(false);
-                }else {
-                    state = gameState.PLAYER_STAND;
-                    checkScores(false);
-                    playDealer();
-                }
+                state = gameState.PLAYER_STAND;
+                checkScores(false);
             }
         });
     }
@@ -167,6 +163,19 @@ public class GameActivity extends AppCompatActivity {
     //Ends the game if the game is in a final state.
     private void endGame() {
         updateCards();
+        Card [] hand = dealer.getHand();
+        Log.i ("=======", "Dealer Hand");
+        for(int i = 0; i < Player.LENGTH; i++){
+            Log.i ("=======", hand [i].toString());
+        }
+        Log.i ("=======", "Total = " + dealer.getCardTotal());
+
+        hand = user.getHand();
+        Log.i ("=======", "Player Hand");
+        for(int i = 0; i < Player.LENGTH; i++){
+            Log.i ("=======", hand [i].toString());
+        }
+
         if(state == gameState.DEALER_WIN){
             user.addBet(-1.0);
             popupMenu("Dealer Wins", String.format("You lose your bet. %s to %s", user.getCardTotal(),dealer.getCardTotal()));
@@ -232,96 +241,49 @@ public class GameActivity extends AppCompatActivity {
         Card rand;
         rand = deck.randomCard();
         targetPlayer.addCard(rand);
-
-        turnCount = user.getPosition();
-        if(dealer.getPosition() > turnCount){
-            turnCount = dealer.getPosition();
-        }
-    }
-
-    //This function draws the cards for the dealer.
-    private void playDealer(){
-        if(dealer.getCardTotal() > 17 && state != gameState.PLAYER_STAND){
-            state = gameState.DEALER_STAND;
-        }
-
-        if (state != gameState.DEALER_STAND) {
-             dealCard(dealer);
-        }
-
-
-        Log.i("=================STATE", state.toString());
-        updateCards();
-        checkScores(false);
-
     }
 
     //This function is the main logic behind the scoring system.
     private void checkScores(boolean isFirstCheck) {
-        Card [] hand = dealer.getHand();
-        Log.i ("=======", "Dealer Hand");
-        for(int i = 0; i < Player.LENGTH; i++){
-            Log.i ("=======", hand [i].toString());
-        }
-        Log.i ("=======", "Total = " + dealer.getCardTotal());
+        user.calculateTotal();
+        dealer.calculateTotal();
 
-        hand = user.getHand();
-        Log.i ("=======", "Player Hand");
-        for(int i = 0; i < Player.LENGTH; i++){
-            Log.i ("=======", hand [i].toString());
-        }
-        Log.i ("=======", "Total = " + user.getCardTotal());
-        // The game must move to an end state with either winning or a draw from this statement
-        if(dealer.getCardTotal() >= 21 || user.getCardTotal() >= 21){
-
-            if(dealer.getCardTotal() == 21 && user.getCardTotal() != 21){
+        if(user.getCardTotal() > 21 && dealer.getCardTotal() > 21){
+            state = gameState.DRAW;
+        } else if(user.getCardTotal() > 21 || dealer.getCardTotal() > 21){
+            if(user.getCardTotal() > 21){
                 state = gameState.DEALER_WIN;
-            } else if(user.getCardTotal() == 21 && dealer.getCardTotal() != 21){
+            }else{
+                state = gameState.PLAYER_WIN;
+            }
+        } else if (user.getCardTotal() == 21 && dealer.getCardTotal() == 21){
+            state = gameState.DRAW;
+        } else if (user.getCardTotal() == 21 || dealer.getCardTotal() == 21){
+            if(user.getCardTotal() == 21){
                 state = gameState.PLAYER_WIN;
                 if(isFirstCheck){
                     state = gameState.NATURAL_WIN;
                 }
-            } else if(dealer.getCardTotal() > 21 && user.getCardTotal() < 21){
-                state = gameState.PLAYER_WIN;
-            } else if (dealer.getCardTotal() < 21 && user.getCardTotal() > 21){
+            }else{
                 state = gameState.DEALER_WIN;
             }
-            else {
-                state = gameState.DRAW;
+        } else if (state == gameState.PLAYER_STAND){
+            if(user.getCardTotal() < dealer.getCardTotal()){
+                state = gameState.DEALER_WIN;
+            }else{
+                if(dealer.getPosition() >= 5){
+                    if(dealer.getCardTotal() > user.getCardTotal()){
+                        state = gameState.DEALER_WIN;
+                    } else {
+                        state = gameState.PLAYER_WIN;
+                    }
+                }else {
+                    dealCard(dealer);
+                    checkScores(false);
+                }
             }
+        }
 
-        /* From here and below the game must continue if the dealer tried to stand or the player
-         * stands and the dealer hasn't won.
-         * If the player stands and they are down the player loses otherwise the game plays until
-         * the dealer is higher or the dealer wins.
-         */
-        }else if(state == gameState.DEALER_STAND && turnCount < Player.LENGTH){
-            if(dealer.getCardTotal() <= user.getCardTotal()){
-                state = gameState.NO_WIN;
-                playDealer();
-            }
-        }
-        else if (state == gameState.PLAYER_STAND && turnCount < Player.LENGTH){
-            if(dealer.getCardTotal() < user.getCardTotal()){
-                playDealer();
-            }else if (dealer.getCardTotal() > user.getCardTotal()){
-                state = gameState.DEALER_WIN;
-            }
-            else if(dealer.getCardTotal() == user.getCardTotal()){
-                state = gameState.DRAW;
-            }
-        }else if(turnCount >= Player.LENGTH && state == gameState.PLAYER_STAND){
-            if(user.getCardTotal() > dealer.getCardTotal()){
-                state = gameState.PLAYER_WIN;
-            }
-            else if( user.getCardTotal() < dealer.getCardTotal()){
-                state = gameState.DEALER_WIN;
-            }
-        }
-        else if( turnCount >= Player.LENGTH){
-            state = gameState.DRAW;
-
-        }
 
         endGame();
     }
