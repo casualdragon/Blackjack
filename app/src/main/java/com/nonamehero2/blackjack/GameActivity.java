@@ -11,9 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,7 +19,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
- * Created by Amy on 2/1/2017.
+ * Created by Amy Hill on 2/1/2017.
+ * This class is the main blackjack game and handles all the logic for it.
  */
 
 /**
@@ -38,7 +36,7 @@ import java.io.ObjectOutputStream;
 
 public class GameActivity extends AppCompatActivity {
 
-    private enum gameState {NO_WIN, DEALER_STAND, PLAYER_STAND, PLAYER_WIN, DEALER_WIN, DRAW, NATURAL_WIN}
+    private enum gameState {NO_WIN, PLAYER_STAND, PLAYER_WIN, DEALER_WIN, DRAW, NATURAL_WIN}
     public final static String FILENAME = "blackjack.txt";
 
     private gameState state;
@@ -126,7 +124,7 @@ public class GameActivity extends AppCompatActivity {
 
         int total = 0;
         Intent intent = getIntent();
-        if(intent.hasExtra(BetActivity.BET_KEY)&& (state != gameState.DEALER_WIN || state != gameState.PLAYER_WIN)) {
+        if(intent.hasExtra(BetActivity.BET_KEY)) {
             bet = intent.getIntExtra(BetActivity.BET_KEY, 0);
             total = intent.getIntExtra(BetActivity.TOTAL, 0);
         }
@@ -177,13 +175,9 @@ public class GameActivity extends AppCompatActivity {
 
         //Initial cards
         dealCard(user);
-        //dealCard(dealer);
+        dealCard(dealer);
         dealCard(user);
-        //dealCard(dealer);
-
-        dealer.addCard(new Card(0,10));
-        dealer.addCard(new Card(0,1));
-
+        dealCard(dealer);
 
         updateCards();
         state = gameState.NO_WIN;
@@ -195,24 +189,22 @@ public class GameActivity extends AppCompatActivity {
     //Ends the game if the game is in a final state.
     private void endGame() {
         updateCards();
-        Card [] hand = dealer.getHand();
-        Log.i ("=======", "Dealer Hand");
-        for(int i = 0; i < Player.LENGTH; i++){
-            Log.i ("=======", hand [i].toString());
-        }
-        Log.i ("=======", "Total = " + dealer.getCardTotal());
-
-        hand = user.getHand();
-        Log.i ("=======", "Player Hand");
-        for(int i = 0; i < Player.LENGTH; i++){
-            Log.i ("=======", hand [i].toString());
-        }
+//        Card [] hand = dealer.getHand();
+//        Log.i ("=======", "Dealer Hand");
+//        for(int i = 0; i < Player.LENGTH; i++){
+//            Log.i ("=======", hand [i].toString());
+//        }
+//        Log.i ("=======", "Total = " + dealer.getCardTotal());
+//
+//        hand = user.getHand();
+//        Log.i ("=======", "Player Hand");
+//        for(int i = 0; i < Player.LENGTH; i++){
+//            Log.i ("=======", hand [i].toString());
+//        }
 
         if(state == gameState.DEALER_WIN){
             user.addBet(-1.0);
             if(user.getMoney() <= bet){
-                //resets the player.
-                user = new Player(bet);
                 popupMenu(GAME_OVER, "You are out out money.");
             }else {
                 popupMenu("Dealer Wins", String.format("You lose your bet. %s to %s", user.getCardTotal(), dealer.getCardTotal()));
@@ -222,14 +214,14 @@ public class GameActivity extends AppCompatActivity {
             toggleButtons(false);
         } else if( state == gameState.PLAYER_WIN){
             user.addBet(2.0);
-            popupMenu("Player Wins", String.format("You win 2x your bet. %s to %s", user.getCardTotal(),dealer.getCardTotal()));
+            popupMenu("You Win!", String.format("You win 2x your bet. %s to %s", user.getCardTotal(),dealer.getCardTotal()));
             //Toast.makeText(this,"Player Wins, player wins twice bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Player Reg Win");
             toggleButtons(false);
         }
         else if(state == gameState.NATURAL_WIN){
             user.addBet(2.5);
-            popupMenu("Player Wins", String.format("You win 2.5x your bet. %s to %s", user.getCardTotal(),dealer.getCardTotal()));
+            popupMenu("Natural Win!", String.format("You win 2.5x your bet. %s to %s", user.getCardTotal(),dealer.getCardTotal()));
 
             //Toast.makeText(this,"Natural Win for player, player wins twice and half the bet", Toast.LENGTH_LONG).show();
             Log.i("======================", "Player Nat Win");
@@ -242,7 +234,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
         TextView moneyView = (TextView) findViewById(R.id.money_amount_textview);
-        moneyView.setText("$" + user.getMoney());
+        moneyView.setText(String.format("$%s", user.getMoney()));
         state = gameState.NO_WIN;
 
     }
@@ -259,7 +251,7 @@ public class GameActivity extends AppCompatActivity {
 
             }
             TextView tv = (TextView)findViewById(R.id.player_total_textview);
-            tv.setText(Integer.toString(user.getCardTotal()));
+            tv.setText(String.format("%s", user.getCardTotal()));
         }
 
         if(dealerImageViews != null && dealer != null){
@@ -270,7 +262,7 @@ public class GameActivity extends AppCompatActivity {
 
             }
             TextView tv = (TextView)findViewById(R.id.dealer_total_textview);
-            tv.setText(Integer.toString(dealer.getCardTotal()));
+            tv.setText(String.format("%s", dealer.getCardTotal()));
         }
     }
 
@@ -341,7 +333,7 @@ public class GameActivity extends AppCompatActivity {
         popup.setTitle(title);
         popup.setMessage(message);
 
-        if(title != GAME_OVER){
+        if(!title.equals(GAME_OVER)){
             popup.setPositiveButton("Conintue\nPlaying", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -370,6 +362,18 @@ public class GameActivity extends AppCompatActivity {
         popup.setNeutralButton("Main\nMenu", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                //Resets the
+                user.setMoney(Player.STARTING_MONEY);
+                user.setCurrentBet(Player.DEFAULT_BET);
+                user.resetHand();
+                dealer.resetHand();
+
+                dealCard(user);
+                dealCard(dealer);
+                dealCard(user);
+                dealCard(dealer);
+
+
                 File file = new File(GameActivity.FILENAME);
                 if(file.delete()){
                     Log.i("=================", file.toString() + " was deleted");

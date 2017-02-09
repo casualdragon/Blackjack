@@ -30,8 +30,8 @@ public class BetActivity extends AppCompatActivity implements View.OnClickListen
 
         et = (TextView) findViewById(R.id.bet_editText);
         total_et = (TextView) findViewById(R.id.total_textView);
-        total = 10000;
-        int bet = 0;
+        total = Player.STARTING_MONEY;
+        int bet = Player.DEFAULT_BET;
 
         //Checks for an intent sent from the GameActivity
         Intent intent = getIntent();
@@ -45,9 +45,9 @@ public class BetActivity extends AppCompatActivity implements View.OnClickListen
             //Debug
             Log.i("===============", "Total: " + Integer.toString(total));
             Log.i("===============", "Bet: " + Integer.toString(bet));
-            et.setText(Integer.toString(bet));
+            et.setText(String.format("%s", bet));
         }
-        total_et.setText(Integer.toString(total - bet));
+        total_et.setText(String.format("%s", total - bet));
 
         //Setting up the buttons
         findViewById(R.id.add_button).setOnClickListener(this);
@@ -77,8 +77,8 @@ public class BetActivity extends AppCompatActivity implements View.OnClickListen
         if((bet + 100) <= total) {
             bet += 100;
             totalMoney = total - bet;
-            et.setText(Integer.toString(bet));
-            total_et.setText(Integer.toString((totalMoney)));
+            et.setText(String.format("%s", bet));
+            total_et.setText(String.format("%s", totalMoney));
         }else{
             Toast.makeText(getApplicationContext(), "The bet cannot exceed the total.",Toast.LENGTH_LONG).show();
         }
@@ -87,8 +87,8 @@ public class BetActivity extends AppCompatActivity implements View.OnClickListen
         if((bet-100) >= 0)  {
             bet -= 100;
             totalMoney = total - bet;
-            et.setText(Integer.toString(bet));
-            total_et.setText(Integer.toString((totalMoney)));
+            et.setText(String.format("%s", bet));
+            total_et.setText(String.format("%s", totalMoney));
         }else{
             Toast.makeText(getApplicationContext(), "The bet cannot be less than 0 or greater than the start total.",Toast.LENGTH_LONG).show();
         }
