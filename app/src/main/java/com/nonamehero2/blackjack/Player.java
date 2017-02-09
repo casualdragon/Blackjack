@@ -11,6 +11,8 @@ import java.io.Serializable;
 public class Player implements Serializable{
     //Fields
     static final int LENGTH = 5;
+    static final int STARTING_MONEY = 10000;
+    static final int DEFAULT_BET = 1000;
     private Card[] hand = new Card[5];
     private int money;
     private int currentBet;
@@ -21,7 +23,7 @@ public class Player implements Serializable{
     public Player(int currentBet) {
         //blanks the cards
         resetHand();
-        this.money = 10000;
+        this.money = STARTING_MONEY;
         this.cardTotal = 0;
         this.currentBet = currentBet;
         this.position = 0;
