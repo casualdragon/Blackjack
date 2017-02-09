@@ -1,11 +1,10 @@
 package com.nonamehero2.blackjack;
 
-import android.util.Log;
-
 import java.io.Serializable;
 
 /**
  * Created by Zachary Taylor on 1/31/2017.
+ * This is the class that is used for the player and dealer.
  */
 
 public class Player implements Serializable{
