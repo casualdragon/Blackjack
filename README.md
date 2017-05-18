@@ -16,7 +16,7 @@ the player has 0 money.
 * Devices it doesn't work with
 
 ## Contributors on GitHub
-* [Amy Hill](https://github.com/nonamehero2)
+* [Amy Hill](https://github.com/casualdragon)
 * [Zachary Taylor](https://github.com/nonamehero2)
 
 ## Permissions
